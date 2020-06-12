@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Box, Typography } from "@material-ui/core";
+import { Grid, Box, Typography, Hidden, Link } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -8,7 +8,7 @@ import SubmitForm from "../components/SubmitForm";
 const useStyles = makeStyles((theme) => ({
   root: {},
   imageSection: {
-    height: "calc(100vh - 64px)",
+    height: "100vh",
     backgroundImage:
       "url(https://fivedayfilm.com/wp-content/uploads/2018/07/Camera-Equipment-For-2018.jpg)",
     backgroundSize: "cover",
@@ -19,8 +19,22 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     backgroundColor: "#c5a3a352",
     display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    color: theme.palette.common.white,
+  },
+  titleWrapper: {
+    textAlign: "center",
+    padding: theme.spacing(3),
+    borderRadius: theme.spacing(1),
+    backgroundColor: "#19181859",
+    transition: "1s",
+    "&:hover": {
+      backgroundColor: "#1f0c0cd9",
+    },
+  },
+  title: {
     color: theme.palette.common.white,
   },
   submitSection: {
@@ -55,9 +69,32 @@ const Home = () => {
     <Grid container className={classes.root}>
       <Grid item xs={12} className={classes.imageSection}>
         <Box className={classes.titleBox}>
-          <Typography variant="h1" component="h1" className={classes.title}>
-            Fish Fry Film Fest
-          </Typography>
+          <Hidden mdDown>
+            <Box className={classes.titleWrapper}>
+              <Typography variant="h1" component="h1" className={classes.title}>
+                Fine Narratives
+              </Typography>
+              <Typography variant="h3" component="h3" className={classes.title}>
+                Film Festival
+              </Typography>
+              <Typography variant="h5" component="h3" className={classes.title}>
+                <Link href="#">Know more</Link>
+              </Typography>
+            </Box>
+          </Hidden>
+          <Hidden mdUp>
+            <Box className={classes.titleWrapper}>
+              <Typography variant="h3" component="h1" className={classes.title}>
+                Fine Narratives
+              </Typography>
+              <Typography variant="h4" component="h3" className={classes.title}>
+                Film Festival
+              </Typography>
+              <Typography variant="h6" component="h3" className={classes.title}>
+                <Link href="#">Know more</Link>
+              </Typography>
+            </Box>
+          </Hidden>
         </Box>
       </Grid>
       <Grid container item xs={12} className={classes.submitSection}>

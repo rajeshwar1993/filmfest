@@ -8,7 +8,7 @@ import {
   Link,
   ExpansionPanel,
   ExpansionPanelSummary,
-  ExpansionPanelDetails,
+  ExpansionPanelDetails
 } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,14 +17,14 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import SubmitForm from "../components/SubmitForm";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {},
   imageSection: {
     height: "100vh",
     backgroundImage:
       "url(https://fivedayfilm.com/wp-content/uploads/2018/07/Camera-Equipment-For-2018.jpg)",
     backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundPosition: "center"
   },
   titleBox: {
     height: "100%",
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    color: theme.palette.common.white,
+    color: theme.palette.common.white
   },
   titleWrapper: {
     textAlign: "center",
@@ -43,11 +43,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#19181859",
     transition: "1s",
     "&:hover": {
-      backgroundColor: "#1f0c0cd9",
-    },
+      backgroundColor: "#1f0c0cd9"
+    }
   },
   title: {
-    color: theme.palette.common.white,
+    color: theme.palette.common.white
   },
   aboutUs: {
     padding: theme.spacing(5, 3),
@@ -58,42 +58,42 @@ const useStyles = makeStyles((theme) => ({
       border: `1px solid ${theme.palette.primary.main}`,
       [theme.breakpoints.up("md")]: {
         width: "50vw",
-        margin: "0 auto",
-      },
-    },
+        margin: "0 auto"
+      }
+    }
   },
   submitSection: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.main
   },
   rules: {
     padding: theme.spacing(2),
     color: theme.palette.common.white,
     [theme.breakpoints.up("md")]: {
-      padding: theme.spacing(4),
-    },
+      padding: theme.spacing(4)
+    }
   },
   rulesWrapper: {
     backgroundColor: theme.palette.secondary.light,
     height: "calc(100% - 32px)",
     padding: theme.spacing(2),
-    borderRadius: theme.spacing(1),
+    borderRadius: theme.spacing(1)
   },
   submit: {
     padding: theme.spacing(2),
     color: theme.palette.primary.main,
     [theme.breakpoints.up("md")]: {
-      padding: theme.spacing(4),
-    },
+      padding: theme.spacing(4)
+    }
   },
   submitWrapper: {
     backgroundColor: theme.palette.common.white,
     height: "calc(100% - 32px)",
     padding: theme.spacing(2),
-    borderRadius: theme.spacing(1),
-  },
+    borderRadius: theme.spacing(1)
+  }
 }));
 
-const Home = () => {
+const Home = ({ data }) => {
   const classes = useStyles();
 
   return (
@@ -103,10 +103,10 @@ const Home = () => {
           <Hidden smDown>
             <Box className={classes.titleWrapper}>
               <Typography variant="h1" component="h1" className={classes.title}>
-                Fine Narratives
+                {data.fest_name}
               </Typography>
               <Typography variant="h3" component="h3" className={classes.title}>
-                Film Festival
+                Short Film Festival
               </Typography>
               <Typography variant="h5" component="h3" className={classes.title}>
                 <Link href="#">Know more</Link>
@@ -116,10 +116,10 @@ const Home = () => {
           <Hidden mdUp>
             <Box className={classes.titleWrapper}>
               <Typography variant="h3" component="h1" className={classes.title}>
-                Fine Narratives
+                {data.fest_name}
               </Typography>
               <Typography variant="h4" component="h3" className={classes.title}>
-                Film Festival
+                Short Film Festival
               </Typography>
               <Typography variant="h6" component="h3" className={classes.title}>
                 <Link href="#">Know more</Link>

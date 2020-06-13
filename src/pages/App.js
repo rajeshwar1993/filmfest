@@ -1,4 +1,5 @@
 import React from "react";
+import "../fire";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import { cyan } from "@material-ui/core/colors";
@@ -11,11 +12,15 @@ const theme = createMuiTheme({
   },
 });
 
+const data = {
+  fest_name: "Tales in 10",
+};
+
 function App() {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <Main />
+        <Main data={data} />
       </ThemeProvider>
     </div>
   );

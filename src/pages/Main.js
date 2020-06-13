@@ -13,32 +13,32 @@ import {
   Hidden,
   IconButton,
   Menu,
-  MenuItem,
+  MenuItem
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
 import Home from "./Home";
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles(theme => {
   return {
     menuBar: {
-      backgroundColor: "transparent",
+      backgroundColor: "#0000006b"
     },
     toolBar: {
       display: "flex",
-      justifyContent: "space-between",
+      justifyContent: "space-between"
     },
     logoWrapper: {
       backgroundColor: "#0000006b",
       borderRadius: theme.spacing(1),
       "& .MuiTypography-root": {
         padding: theme.spacing(1, 2),
-        color: theme.palette.common.white,
-      },
+        color: theme.palette.common.white
+      }
     },
     mobileMenuButton: {
       backgroundColor: "#0000006b",
-      borderRadius: theme.spacing(3),
+      borderRadius: theme.spacing(3)
     },
     menuOpts: {
       width: "25vw",
@@ -48,17 +48,20 @@ const useStyles = makeStyles((theme) => {
       display: "flex",
       justifyContent: "space-around",
       alignItems: "center",
-      borderRadius: theme.spacing(1),
+      borderRadius: theme.spacing(1)
     },
+    menuEls: {
+      color: "white"
+    }
   };
 });
 
-const Main = () => {
+const Main = ({ data }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const openMenu = (e) => {
+  const openMenu = e => {
     setAnchorEl(e.currentTarget);
   };
 
@@ -72,29 +75,31 @@ const Main = () => {
         <Toolbar className={classes.toolBar}>
           <Hidden smDown>
             <Box className={classes.logoWrapper}>
-              <Typography variant="h6">
-                Fine Narratives Film Festival
-              </Typography>
+              <Typography variant="h6">{data.fest_name}</Typography>
             </Box>
             <Box className={classes.menuOpts}>
               <Button
                 type="button"
-                variant="outlined"
+                variant="contained"
                 size="small"
                 color="primary"
               >
                 Submit Film
               </Button>
-              <Link href="#">About</Link>
-              <Link href="#">Rules</Link>
-              <Link href="#">FAQ</Link>
+              <Link href="#" className={classes.menuEls}>
+                <Typography>About</Typography>
+              </Link>
+              <Link href="#" className={classes.menuEls}>
+                Rules
+              </Link>
+              <Link href="#" className={classes.menuEls}>
+                FAQ
+              </Link>
             </Box>
           </Hidden>
           <Hidden mdUp>
             <Box className={classes.logoWrapper}>
-              <Typography variant="body1">
-                Fine Narratives Film Festival
-              </Typography>
+              <Typography variant="body1">{data.fest_name}</Typography>
             </Box>
             <Box className={classes.mobileMenuButton}>
               <IconButton
@@ -114,19 +119,29 @@ const Main = () => {
                 onClose={handleMenuClose}
               >
                 <MenuItem onClick={handleMenuClose}>
-                  <Button href="#" color="primary" variant="contained">
-                    {" "}
+                  <Button
+                    href="#"
+                    fullWidth
+                    color="primary"
+                    variant="contained"
+                  >
                     Submit Film
                   </Button>
                 </MenuItem>
                 <MenuItem onClick={handleMenuClose}>
-                  <Link href="#">About</Link>
+                  <Button href="#" fullWidth color="primary" variant="text">
+                    About
+                  </Button>
                 </MenuItem>
                 <MenuItem onClick={handleMenuClose}>
-                  <Link href="#">Rules</Link>
+                  <Button href="#" fullWidth color="primary" variant="text">
+                    Rules
+                  </Button>
                 </MenuItem>
                 <MenuItem onClick={handleMenuClose}>
-                  <Link href="#">FAQ</Link>
+                  <Button href="#" fullWidth color="primary" variant="text">
+                    FAQ
+                  </Button>
                 </MenuItem>
               </Menu>
             </Box>
@@ -134,7 +149,7 @@ const Main = () => {
         </Toolbar>
       </AppBar>
       <Switch>
-        <Route to="/" component={Home} />
+        <Route to="/" component={props => <Home data={data} {...props} />} />
       </Switch>
     </BrowserRouter>
   );

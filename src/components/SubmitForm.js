@@ -14,6 +14,7 @@ const SubmitForm = () => {
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField
+              fullWidth
               name={"team_name"}
               variant="standard"
               label={"Team Name"}
@@ -21,6 +22,7 @@ const SubmitForm = () => {
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField
+              fullWidth
               name={"leader_name"}
               variant="standard"
               label={"Team Leader Name"}
@@ -28,6 +30,7 @@ const SubmitForm = () => {
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField
+              fullWidth
               type="email"
               name={"email"}
               variant="standard"
@@ -36,16 +39,23 @@ const SubmitForm = () => {
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField
+              fullWidth
               name={"film_title"}
               variant="standard"
               label={"Film Title"}
             />
           </Grid>
           <Grid item xs={12} md={4}>
-            <TextField name={"gerne"} variant="standard" label={"Film Gerne"} />
+            <TextField
+              fullWidth
+              name={"genre"}
+              variant="standard"
+              label={"Film Genre"}
+            />
           </Grid>
           <Grid item xs={12} md={4}>
             <TextField
+              fullWidth
               name={"rt"}
               variant="standard"
               label={"Run Time"}
@@ -83,8 +93,14 @@ const SubmitForm = () => {
               fullWidth
             />
           </Grid>
+          <Grid item xs={10} md={6}>
+            <Button type="button" fullWidth variant="contained" color="primary">
+              Upload Payment Receipt Image
+              <input type="file" accept="image/*" style={{ display: "none" }} />
+            </Button>
+          </Grid>
           <Grid item xs={12}>
-            <Button fullWidth variant="outlined" color="primary">
+            <Button type="submit" fullWidth variant="outlined" color="primary">
               Submit
             </Button>
           </Grid>

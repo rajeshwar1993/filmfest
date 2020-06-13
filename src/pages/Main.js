@@ -70,7 +70,7 @@ const Main = () => {
     <BrowserRouter>
       <AppBar position="fixed" className={classes.menuBar}>
         <Toolbar className={classes.toolBar}>
-          <Hidden mdDown>
+          <Hidden smDown>
             <Box className={classes.logoWrapper}>
               <Typography variant="h6">
                 Fine Narratives Film Festival

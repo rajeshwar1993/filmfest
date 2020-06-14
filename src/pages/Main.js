@@ -182,6 +182,7 @@ const Main = ({ data }) => {
                     )}
                     {item.type === "link" && (
                       <Button
+                        href={`#${item.anchor}`}
                         key={item.text}
                         fullWidth
                         color="primary"

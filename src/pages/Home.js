@@ -5,15 +5,25 @@ import {
   Box,
   Typography,
   Hidden,
-  Link,
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
+  IconButton,
+  Button,
 } from "@material-ui/core";
+
+import { Element, Link as ScrollLink } from "react-scroll";
 
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
+import FacebookIcon from "@material-ui/icons/Facebook";
+import InstagramIcon from "@material-ui/icons/Instagram";
+import TwitterIcon from "@material-ui/icons/Twitter";
+import YouTubeIcon from "@material-ui/icons/YouTube";
+import EmailIcon from "@material-ui/icons/Email";
+import PhoneIcon from "@material-ui/icons/Phone";
 
 import SubmitForm from "../components/SubmitForm";
 
@@ -42,8 +52,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.spacing(1),
     backgroundColor: "#19181859",
     transition: "1s",
-    "&:hover": {
-      backgroundColor: "#000000d9",
+    [theme.breakpoints.up("md")]: {
+      "&:hover": {
+        backgroundColor: "#000000d9",
+      },
     },
   },
   title: {
@@ -53,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
 
     marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(8),
     "& .MuiBox-root": {
       display: "flex",
       justifyContent: "center",
@@ -86,8 +99,20 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  followUs: {
+    padding: theme.spacing(2, 3),
+    textAlign: "center",
+    backgroundColor: theme.palette.common.sectionBackground,
+    color: theme.palette.common.textColor,
+  },
+  contactUs: {
+    padding: theme.spacing(2, 3, 7),
+    textAlign: "center",
+    backgroundColor: theme.palette.common.sectionBackground,
+    color: theme.palette.common.textColor,
+  },
   submitSection: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.common.sectionBackground,
   },
   rules: {
     padding: theme.spacing(2),
@@ -97,10 +122,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   rulesWrapper: {
-    backgroundColor: theme.palette.secondary.light,
     height: "calc(100% - 32px)",
     padding: theme.spacing(2),
     borderRadius: theme.spacing(1),
+    border: `1px solid ${theme.palette.primary.main}`,
   },
   submit: {
     padding: theme.spacing(2),
@@ -111,10 +136,21 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   submitWrapper: {
-    backgroundColor: theme.palette.common.white,
+    backgroundColor: "#f5f5f5",
     height: "calc(100% - 32px)",
     padding: theme.spacing(2),
     borderRadius: theme.spacing(1),
+  },
+  faqExpansion: {
+    marginTop: theme.spacing(2),
+  },
+  knowMore: {
+    marginTop: theme.spacing(2),
+    color: theme.palette.primary.main,
+    "&:hover": {
+      textDecoration: "underline",
+      cursor: "pointer",
+    },
   },
 }));
 
@@ -152,9 +188,17 @@ const Home = ({ data }) => {
                 <Typography
                   variant="h6"
                   component="h6"
-                  className={classes.title}
+                  className={classes.knowMore}
                 >
-                  <Link href="#">Know more</Link>
+                  <ScrollLink
+                    to="follow"
+                    spy={true}
+                    smooth={true}
+                    duration={1000}
+                    offset={-70}
+                  >
+                    Know more
+                  </ScrollLink>
                 </Typography>
               </Box>
               <Box className={classes.partner}>
@@ -169,7 +213,7 @@ const Home = ({ data }) => {
                   <div>
                     <img
                       src="https://www.searchpng.com/wp-content/uploads/2019/03/Swiggy-PNG-Logo.png"
-                      atl="swiggy"
+                      alt="swiggy"
                     />
                   </div>
                   <div>
@@ -178,7 +222,7 @@ const Home = ({ data }) => {
                         marginTop: "calc(50% - 47px)",
                       }}
                       src="https://futureforward.in/images/logo.png"
-                      atl="future forward"
+                      alt="future forward"
                     />
                   </div>
                 </Box>
@@ -212,9 +256,17 @@ const Home = ({ data }) => {
                 <Typography
                   variant="body2"
                   component="h6"
-                  className={classes.title}
+                  className={classes.knowMore}
                 >
-                  <Link href="#">Know more</Link>
+                  <ScrollLink
+                    to="follow"
+                    spy={true}
+                    smooth={true}
+                    duration={1000}
+                    offset={-70}
+                  >
+                    Know more
+                  </ScrollLink>
                 </Typography>
               </Box>
               <Box className={classes.partner}>
@@ -229,7 +281,7 @@ const Home = ({ data }) => {
                   <div>
                     <img
                       src="https://www.searchpng.com/wp-content/uploads/2019/03/Swiggy-PNG-Logo.png"
-                      atl="swiggy"
+                      alt="swiggy"
                     />
                   </div>
                   <div>
@@ -238,7 +290,7 @@ const Home = ({ data }) => {
                         marginTop: "calc(50% - 47px)",
                       }}
                       src="https://futureforward.in/images/logo.png"
-                      atl="future forward"
+                      alt="future forward"
                     />
                   </div>
                 </Box>
@@ -247,10 +299,32 @@ const Home = ({ data }) => {
           </Hidden>
         </Box>
       </Grid>
+      <Grid id="follow" item xs={12} className={classes.followUs}>
+        <Typography variant="h6" component="h3">
+          Follow
+        </Typography>
+        <Box>
+          <IconButton aria-label="Facebook" style={{ color: "white" }}>
+            <FacebookIcon fontSize="large" />
+          </IconButton>
+
+          <IconButton aria-label="Instagram" style={{ color: "white" }}>
+            <InstagramIcon fontSize="large" />
+          </IconButton>
+
+          <IconButton aria-label="Twitter" style={{ color: "white" }}>
+            <TwitterIcon fontSize="large" />
+          </IconButton>
+
+          <IconButton aria-label="YouTube" style={{ color: "white" }}>
+            <YouTubeIcon fontSize="large" />
+          </IconButton>
+        </Box>
+      </Grid>
       <Grid item xs={12} className={classes.aboutUs}>
         <Box>
           <Typography variant="h4" component="h3">
-            About Us
+            About
           </Typography>
 
           <Typography variant="body2">
@@ -266,14 +340,20 @@ const Home = ({ data }) => {
       </Grid>
       <Grid container item xs={12} className={classes.submitSection}>
         <Grid item xs={12} md={7} className={classes.submit}>
-          <Box className={classes.submitWrapper}>
-            <SubmitForm />
-          </Box>
+          <Element name="submit" className="element">
+            <Box className={classes.submitWrapper}>
+              <SubmitForm />
+            </Box>
+          </Element>
         </Grid>
         <Grid item xs={12} md={5} className={classes.rules}>
           <Box className={classes.rulesWrapper}>
-            <Typography variant="h5" component="h5">
-              How to submit:
+            <Typography
+              variant="h5"
+              component="h5"
+              style={{ textAlign: "center" }}
+            >
+              How to submit
             </Typography>
             <Typography variant="subtitle1" component="span">
               <ol>
@@ -288,10 +368,14 @@ const Home = ({ data }) => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={6} className={classes.rules}>
+        <Grid id={"rules"} item xs={12} md={6} className={classes.rules}>
           <Box className={classes.rulesWrapper}>
-            <Typography variant="h5" component="h5">
-              Rules:
+            <Typography
+              variant="h5"
+              component="h5"
+              style={{ textAlign: "center" }}
+            >
+              Rules
             </Typography>
             <Typography variant="subtitle1" component="span">
               <ol>
@@ -306,12 +390,16 @@ const Home = ({ data }) => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={6} className={classes.rules}>
+        <Grid id={"faq"} item xs={12} md={6} className={classes.rules}>
           <Box className={classes.rulesWrapper}>
-            <Typography variant="h5" component="h5">
+            <Typography
+              variant="h5"
+              component="h5"
+              style={{ textAlign: "center" }}
+            >
               FAQ
             </Typography>
-            <ExpansionPanel>
+            <ExpansionPanel className={classes.faqExpansion}>
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls={"q1"}
@@ -343,6 +431,31 @@ const Home = ({ data }) => {
                 </Typography>
               </ExpansionPanelDetails>
             </ExpansionPanel>
+          </Box>
+        </Grid>
+        <Grid id={"contact"} item xs={12} className={classes.contactUs}>
+          <Typography variant="h6" component="h3">
+            Contact
+          </Typography>
+          <Box>
+            <Button
+              href="mailto:productions.sharp.nerd@gmail.com"
+              aria-label="Email contact"
+              style={{ color: "white" }}
+              startIcon={<EmailIcon />}
+              fullWidth
+            >
+              productions.sharp.nerd@gmail.com
+            </Button>
+
+            <Button
+              href="tel:+91999999999"
+              aria-label="Instagram"
+              style={{ color: "white" }}
+              startIcon={<PhoneIcon />}
+            >
+              +91999999999
+            </Button>
           </Box>
         </Grid>
       </Grid>

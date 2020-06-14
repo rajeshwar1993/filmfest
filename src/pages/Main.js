@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { Link as ScrollLink, scroller } from "react-scroll";
+
+import { makeStyles } from "@material-ui/core/styles";
 
 import {
   Box,
@@ -9,36 +11,40 @@ import {
   Typography,
   Toolbar,
   Button,
-  Link,
   Hidden,
   IconButton,
   Menu,
-  MenuItem
+  MenuItem,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
 import Home from "./Home";
 
-const useStyles = makeStyles(theme => {
+const useStyles = makeStyles((theme) => {
   return {
     menuBar: {
-      backgroundColor: "#000000de"
+      backgroundColor: "#000000de",
     },
     toolBar: {
       display: "flex",
-      justifyContent: "space-between"
+      justifyContent: "space-between",
     },
     logoWrapper: {
       backgroundColor: "#0000006b",
       borderRadius: theme.spacing(1),
       "& .MuiTypography-root": {
         padding: theme.spacing(1, 2),
-        color: theme.palette.common.white
-      }
+        color: theme.palette.common.white,
+      },
     },
     mobileMenuButton: {
       backgroundColor: "#0000006b",
-      borderRadius: theme.spacing(3)
+      borderRadius: theme.spacing(3),
+    },
+    mobileMenu: {
+      "& .MuiPaper-root": {
+        backgroundColor: theme.palette.common.sectionBackground,
+      },
     },
     menuOpts: {
       width: "25vw",
@@ -48,11 +54,17 @@ const useStyles = makeStyles(theme => {
       display: "flex",
       justifyContent: "space-around",
       alignItems: "center",
-      borderRadius: theme.spacing(1)
+      borderRadius: theme.spacing(1),
     },
     menuEls: {
-      color: theme.palette.common.textColor
-    }
+      color: theme.palette.common.textColor,
+      cursor: "pointer",
+      [theme.breakpoints.up("md")]: {
+        "&:hover": {
+          textDecoration: "underline",
+        },
+      },
+    },
   };
 });
 
@@ -61,7 +73,7 @@ const Main = ({ data }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const openMenu = e => {
+  const openMenu = (e) => {
     setAnchorEl(e.currentTarget);
   };
 
@@ -79,22 +91,65 @@ const Main = ({ data }) => {
             </Box>
             <Box className={classes.menuOpts}>
               <Button
-                type="button"
+                href="#"
                 variant="contained"
                 size="small"
                 color="primary"
+                onClickCapture={(e) => {
+                  e.preventDefault();
+                  scroller.scrollTo("submit", {
+                    duration: 1000,
+                    smooth: true,
+                    delay: 0,
+                    offset: -70,
+                  });
+                }}
               >
                 Submit Film
               </Button>
-              <Link href="#" className={classes.menuEls}>
+
+              <ScrollLink
+                to="follow"
+                spy={true}
+                smooth={true}
+                duration={1000}
+                offset={-70}
+                className={classes.menuEls}
+              >
                 <Typography>About</Typography>
-              </Link>
-              <Link href="#" className={classes.menuEls}>
+              </ScrollLink>
+
+              <ScrollLink
+                to="rules"
+                spy={true}
+                smooth={true}
+                duration={1000}
+                offset={-70}
+                className={classes.menuEls}
+              >
                 Rules
-              </Link>
-              <Link href="#" className={classes.menuEls}>
+              </ScrollLink>
+
+              <ScrollLink
+                to="faq"
+                spy={true}
+                smooth={true}
+                duration={1000}
+                offset={-70}
+                className={classes.menuEls}
+              >
                 FAQ
-              </Link>
+              </ScrollLink>
+              <ScrollLink
+                to="contact"
+                spy={true}
+                smooth={true}
+                duration={1000}
+                offset={-70}
+                className={classes.menuEls}
+              >
+                Contact Us
+              </ScrollLink>
             </Box>
           </Hidden>
           <Hidden mdUp>
@@ -117,6 +172,7 @@ const Main = ({ data }) => {
                 keepMounted
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
+                className={classes.mobileMenu}
               >
                 <MenuItem onClick={handleMenuClose}>
                   <Button
@@ -124,23 +180,93 @@ const Main = ({ data }) => {
                     fullWidth
                     color="primary"
                     variant="contained"
+                    onClickCapture={(e) => {
+                      e.preventDefault();
+                      scroller.scrollTo("submit", {
+                        duration: 1000,
+                        smooth: true,
+                        delay: 0,
+                        offset: -70,
+                      });
+                    }}
                   >
                     Submit Film
                   </Button>
                 </MenuItem>
                 <MenuItem onClick={handleMenuClose}>
-                  <Button href="#" fullWidth color="primary" variant="text">
+                  <Button
+                    href="#"
+                    fullWidth
+                    color="primary"
+                    variant="text"
+                    onClickCapture={(e) => {
+                      e.preventDefault();
+                      scroller.scrollTo("follow", {
+                        duration: 1000,
+                        smooth: true,
+                        delay: 0,
+                        offset: -70,
+                      });
+                    }}
+                  >
                     About
                   </Button>
                 </MenuItem>
                 <MenuItem onClick={handleMenuClose}>
-                  <Button href="#" fullWidth color="primary" variant="text">
+                  <Button
+                    href="#"
+                    fullWidth
+                    color="primary"
+                    variant="text"
+                    onClickCapture={(e) => {
+                      e.preventDefault();
+                      scroller.scrollTo("rules", {
+                        duration: 1000,
+                        smooth: true,
+                        delay: 0,
+                        offset: -70,
+                      });
+                    }}
+                  >
                     Rules
                   </Button>
                 </MenuItem>
                 <MenuItem onClick={handleMenuClose}>
-                  <Button href="#" fullWidth color="primary" variant="text">
+                  <Button
+                    href="#"
+                    fullWidth
+                    color="primary"
+                    variant="text"
+                    onClickCapture={(e) => {
+                      e.preventDefault();
+                      scroller.scrollTo("faq", {
+                        duration: 1000,
+                        smooth: true,
+                        delay: 0,
+                        offset: -70,
+                      });
+                    }}
+                  >
                     FAQ
+                  </Button>
+                </MenuItem>
+                <MenuItem onClick={handleMenuClose}>
+                  <Button
+                    href="#"
+                    fullWidth
+                    color="primary"
+                    variant="text"
+                    onClickCapture={(e) => {
+                      e.preventDefault();
+                      scroller.scrollTo("contact", {
+                        duration: 1000,
+                        smooth: true,
+                        delay: 0,
+                        offset: -70,
+                      });
+                    }}
+                  >
+                    Contact us
                   </Button>
                 </MenuItem>
               </Menu>
@@ -149,7 +275,7 @@ const Main = ({ data }) => {
         </Toolbar>
       </AppBar>
       <Switch>
-        <Route to="/" component={props => <Home data={data} {...props} />} />
+        <Route to="/" component={(props) => <Home data={data} {...props} />} />
       </Switch>
     </BrowserRouter>
   );

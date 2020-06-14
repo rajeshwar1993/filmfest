@@ -12,7 +12,6 @@ import {
   MenuItem,
   FormHelperText,
 } from "@material-ui/core";
-import { deepPurple } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   errorText: {
@@ -93,7 +92,7 @@ const SubmitForm = () => {
             //enter the image url in film entry
             //create a doc(film entry)
             console.log(url);
-            let imgDocRef = await entries.doc(docRef).set({
+            await entries.doc(docRef).set({
               ...uploadData,
               paypic: url,
               scr_time: "",
@@ -241,14 +240,14 @@ const SubmitForm = () => {
               helperText={!!errors.link && "This info is required."}
             />
           </Grid>
-          <Grid item xs={10} md={6}>
+          <Grid item xs={8} md={6}>
             <Button
               fullWidth
               variant="contained"
-              color="primary"
+              color="secondary"
               component="label"
             >
-              Upload Payment Receipt Image
+              Upload Payment Screenshot
               <input
                 type="file"
                 accept="image/*"
@@ -276,7 +275,7 @@ const SubmitForm = () => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <Button type="submit" fullWidth variant="outlined" color="primary">
+            <Button type="submit" fullWidth variant="contained" color="primary">
               Submit
             </Button>
           </Grid>

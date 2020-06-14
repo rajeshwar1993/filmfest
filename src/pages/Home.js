@@ -12,8 +12,6 @@ import {
   Button,
 } from "@material-ui/core";
 
-import { Element, Link as ScrollLink } from "react-scroll";
-
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -24,8 +22,6 @@ import TwitterIcon from "@material-ui/icons/Twitter";
 import YouTubeIcon from "@material-ui/icons/YouTube";
 import EmailIcon from "@material-ui/icons/Email";
 import PhoneIcon from "@material-ui/icons/Phone";
-
-import SubmitForm from "../components/SubmitForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -114,33 +110,6 @@ const useStyles = makeStyles((theme) => ({
   submitSection: {
     backgroundColor: theme.palette.common.sectionBackground,
   },
-  rules: {
-    padding: theme.spacing(2),
-    color: theme.palette.common.white,
-    [theme.breakpoints.up("md")]: {
-      padding: theme.spacing(4),
-    },
-  },
-  rulesWrapper: {
-    height: "calc(100% - 32px)",
-    padding: theme.spacing(2),
-    borderRadius: theme.spacing(1),
-    border: `1px solid ${theme.palette.primary.main}`,
-  },
-  submit: {
-    padding: theme.spacing(2),
-    backgroundColor: theme.palette.common.sectionBackground,
-    color: theme.palette.primary.main,
-    [theme.breakpoints.up("md")]: {
-      padding: theme.spacing(4),
-    },
-  },
-  submitWrapper: {
-    backgroundColor: "#f5f5f5",
-    height: "calc(100% - 32px)",
-    padding: theme.spacing(2),
-    borderRadius: theme.spacing(1),
-  },
   faqExpansion: {
     marginTop: theme.spacing(2),
   },
@@ -150,6 +119,22 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       textDecoration: "underline",
       cursor: "pointer",
+    },
+  },
+  dataBoxes: {
+    padding: theme.spacing(5, 3),
+    textAlign: "center",
+    backgroundColor: theme.palette.common.sectionBackground,
+    "& .MuiBox-root": {
+      textAlign: "left",
+      padding: theme.spacing(2),
+      borderRadius: theme.spacing(1),
+      border: `1px solid ${theme.palette.primary.main}`,
+      color: theme.palette.common.textColor,
+      [theme.breakpoints.up("md")]: {
+        width: "50vw",
+        margin: "0 auto",
+      },
     },
   },
 }));
@@ -190,15 +175,14 @@ const Home = ({ data }) => {
                   component="h6"
                   className={classes.knowMore}
                 >
-                  <ScrollLink
-                    to="follow"
-                    spy={true}
-                    smooth={true}
-                    duration={1000}
-                    offset={-70}
+                  <Button
+                    href="/submit"
+                    color="primary"
+                    variant="outlined"
+                    size="large"
                   >
-                    Know more
-                  </ScrollLink>
+                    Submit Film
+                  </Button>
                 </Typography>
               </Box>
               <Box className={classes.partner}>
@@ -258,15 +242,9 @@ const Home = ({ data }) => {
                   component="h6"
                   className={classes.knowMore}
                 >
-                  <ScrollLink
-                    to="follow"
-                    spy={true}
-                    smooth={true}
-                    duration={1000}
-                    offset={-70}
-                  >
-                    Know more
-                  </ScrollLink>
+                  <Button href="/submit" color="primary" variant="outlined">
+                    Submit Film
+                  </Button>
                 </Typography>
               </Box>
               <Box className={classes.partner}>
@@ -327,137 +305,141 @@ const Home = ({ data }) => {
             About
           </Typography>
 
-          <Typography variant="body2">
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum."
+          <Typography variant="subtitle1">
+            <p>
+              IFP’s flagship challenge is back! Assemble your crew and get ready
+              to script, shoot, edit and upload a film in just 50 hours.
+              Experience the thrill of creating a film in 50 hours, the tightest
+              and most exuberant deadline you’ll ever experience
+            </p>
+            <p>
+              Your team Size can be 1 to 20 people. Teams can choose any one
+              category to participate – Professional, Amateur or Mobile. The
+              theme will be revealed at the beginning of 50 hours on Sep 25,
+              8pm, IST
+            </p>
+            <p>
+              Over 1.65 Lac filmmakers from over 30 countries participated in
+              our challenge in last 9 years. Be one of them this year and stand
+              a chance to have your work showcased to the best directors and
+              filmmakers in the industry.
+            </p>{" "}
           </Typography>
         </Box>
       </Grid>
-      <Grid container item xs={12} className={classes.submitSection}>
-        <Grid item xs={12} md={7} className={classes.submit}>
-          <Element name="submit" className="element">
-            <Box className={classes.submitWrapper}>
-              <SubmitForm />
-            </Box>
-          </Element>
-        </Grid>
-        <Grid item xs={12} md={5} className={classes.rules}>
-          <Box className={classes.rulesWrapper}>
-            <Typography
-              variant="h5"
-              component="h5"
-              style={{ textAlign: "center" }}
-            >
-              How to submit
-            </Typography>
-            <Typography variant="subtitle1" component="span">
-              <ol>
-                <li>
-                  Upload your film in one of the following:
-                  <ul>
-                    <li>Youtube Private Link (Recommended)</li>
-                    <li>Google Drive</li>
-                  </ul>
-                </li>
-              </ol>
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid id={"rules"} item xs={12} md={6} className={classes.rules}>
-          <Box className={classes.rulesWrapper}>
-            <Typography
-              variant="h5"
-              component="h5"
-              style={{ textAlign: "center" }}
-            >
-              Rules
-            </Typography>
-            <Typography variant="subtitle1" component="span">
-              <ol>
-                <li>
-                  Upload your film in one of the following:
-                  <ul>
-                    <li>Youtube Private Link (Recommended)</li>
-                    <li>Google Drive</li>
-                  </ul>
-                </li>
-              </ol>
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid id={"faq"} item xs={12} md={6} className={classes.rules}>
-          <Box className={classes.rulesWrapper}>
-            <Typography
-              variant="h5"
-              component="h5"
-              style={{ textAlign: "center" }}
-            >
-              FAQ
-            </Typography>
-            <ExpansionPanel className={classes.faqExpansion}>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls={"q1"}
-                id={"q1"}
-              >
-                <Typography variant="subtitle1" component="span">
-                  Q: Are we going to succeed ?
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <Typography variant="body2" component="span">
-                  A: Hell Yeah!!
-                </Typography>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls={"q2"}
-                id={"q2"}
-              >
-                <Typography variant="subtitle1" component="span">
-                  Q: Do we have any doubts about that?
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <Typography variant="body2" component="span">
-                  A: Hell Yeah!!
-                </Typography>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          </Box>
-        </Grid>
-        <Grid id={"contact"} item xs={12} className={classes.contactUs}>
-          <Typography variant="h6" component="h3">
-            Contact
+      <Grid id={"dates"} item xs={12} className={classes.dataBoxes}>
+        <Box>
+          <Typography
+            variant="h5"
+            component="h5"
+            style={{ textAlign: "center" }}
+          >
+            Festival Dates
           </Typography>
-          <Box>
-            <Button
-              href="mailto:productions.sharp.nerd@gmail.com"
-              aria-label="Email contact"
-              style={{ color: "white" }}
-              startIcon={<EmailIcon />}
-              fullWidth
+          <Typography variant="subtitle1" component="span">
+            <ol>
+              <li>
+                The timeline is as follows:
+                <ul>
+                  <li>Commencement - 1st July</li>
+                  <li>Last Day for film submission - 20th July</li>
+                  <li>Film Screening - 5-6th August</li>
+                  <li>Prize Distribution - 15th August</li>
+                </ul>
+              </li>
+            </ol>
+          </Typography>
+        </Box>
+      </Grid>
+      <Grid id={"rules"} item xs={12} className={classes.dataBoxes}>
+        <Box>
+          <Typography
+            variant="h5"
+            component="h5"
+            style={{ textAlign: "center" }}
+          >
+            Rules
+          </Typography>
+          <Typography variant="subtitle1" component="span">
+            <ol>
+              <li>
+                Upload your film in one of the following:
+                <ul>
+                  <li>Youtube Private Link (Recommended)</li>
+                  <li>Google Drive</li>
+                </ul>
+              </li>
+            </ol>
+          </Typography>
+        </Box>
+      </Grid>
+      <Grid id={"faq"} item xs={12} className={classes.dataBoxes}>
+        <Box>
+          <Typography
+            variant="h5"
+            component="h5"
+            style={{ textAlign: "center" }}
+          >
+            FAQ
+          </Typography>
+          <ExpansionPanel className={classes.faqExpansion}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={"q1"}
+              id={"q1"}
             >
-              productions.sharp.nerd@gmail.com
-            </Button>
+              <Typography variant="subtitle1" component="span">
+                Q: Are we going to succeed ?
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Typography variant="body2" component="span">
+                A: Hell Yeah!!
+              </Typography>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={"q2"}
+              id={"q2"}
+            >
+              <Typography variant="subtitle1" component="span">
+                Q: Do we have any doubts about that?
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Typography variant="body2" component="span">
+                A: Hell Yeah!!
+              </Typography>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </Box>
+      </Grid>
+      <Grid id={"contact"} item xs={12} className={classes.contactUs}>
+        <Typography variant="h6" component="h3">
+          Contact
+        </Typography>
+        <Box>
+          <Button
+            href="mailto:productions.sharp.nerd@gmail.com"
+            aria-label="Email contact"
+            style={{ color: "white" }}
+            startIcon={<EmailIcon />}
+            fullWidth
+          >
+            productions.sharp.nerd@gmail.com
+          </Button>
 
-            <Button
-              href="tel:+91999999999"
-              aria-label="Instagram"
-              style={{ color: "white" }}
-              startIcon={<PhoneIcon />}
-            >
-              +91999999999
-            </Button>
-          </Box>
-        </Grid>
+          <Button
+            href="tel:+91999999999"
+            aria-label="Instagram"
+            style={{ color: "white" }}
+            startIcon={<PhoneIcon />}
+          >
+            +91999999999
+          </Button>
+        </Box>
       </Grid>
     </Grid>
   );

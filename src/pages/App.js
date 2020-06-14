@@ -1,15 +1,16 @@
 import React from "react";
 import "../fire";
+import { BrowserRouter } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
-import { amber, blueGrey } from "@material-ui/core/colors";
+import { amber, indigo } from "@material-ui/core/colors";
 
 import Main from "./Main";
 
 const theme = createMuiTheme({
   palette: {
     primary: amber,
-    secondary: blueGrey,
+    secondary: indigo,
     common: {
       sectionBackground: "#25211f",
       textColor: "#fff",
@@ -23,9 +24,11 @@ const data = {
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" style={{ backgroundColor: "#25211f" }}>
       <ThemeProvider theme={theme}>
-        <Main data={data} />
+        <BrowserRouter>
+          <Main data={data} />
+        </BrowserRouter>
       </ThemeProvider>
     </div>
   );

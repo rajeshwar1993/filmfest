@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 
-import { Link as ScrollLink, scroller } from "react-scroll";
+import { scroller } from "react-scroll";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -15,10 +15,13 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Link,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
 import Home from "./Home";
+import SubmitForm from "./SubmitForm";
+import Sharpnerd from "./Sharpnerd";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -47,7 +50,7 @@ const useStyles = makeStyles((theme) => {
       },
     },
     menuOpts: {
-      width: "25vw",
+      width: "35vw",
       minWidth: "400px",
       backgroundColor: "#0000006b",
       padding: theme.spacing(1),
@@ -68,8 +71,19 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
+const menuItemsHome = [
+  { text: "Submit Film", anchor: "submit", type: "button" },
+  { text: "About", anchor: "follow", type: "link" },
+  { text: "Dates", anchor: "dates", type: "link" },
+  { text: "Rules", anchor: "rules", type: "link" },
+  { text: "FAQ", anchor: "faq", type: "link" },
+  { text: "Contact", anchor: "contact", type: "link" },
+  { text: "Sharpnerd", anchor: "Sharpnerd", type: "button" },
+];
+
 const Main = ({ data }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -81,8 +95,20 @@ const Main = ({ data }) => {
     setAnchorEl(null);
   };
 
+  const scrollEl = (e, pos) => {
+    //e.preventDefault();
+    console.log(pos);
+    history.push(`/#${pos}`);
+    scroller.scrollTo(pos, {
+      duration: 1000,
+      smooth: true,
+      delay: 0,
+      offset: -70,
+    });
+  };
+
   return (
-    <BrowserRouter>
+    <>
       <AppBar position="fixed" className={classes.menuBar}>
         <Toolbar className={classes.toolBar}>
           <Hidden smDown>
@@ -90,66 +116,33 @@ const Main = ({ data }) => {
               <Typography variant="h6">{data.fest_name}</Typography>
             </Box>
             <Box className={classes.menuOpts}>
-              <Button
-                href="#"
-                variant="contained"
-                size="small"
-                color="primary"
-                onClickCapture={(e) => {
-                  e.preventDefault();
-                  scroller.scrollTo("submit", {
-                    duration: 1000,
-                    smooth: true,
-                    delay: 0,
-                    offset: -70,
-                  });
-                }}
-              >
-                Submit Film
-              </Button>
-
-              <ScrollLink
-                to="follow"
-                spy={true}
-                smooth={true}
-                duration={1000}
-                offset={-70}
-                className={classes.menuEls}
-              >
-                <Typography>About</Typography>
-              </ScrollLink>
-
-              <ScrollLink
-                to="rules"
-                spy={true}
-                smooth={true}
-                duration={1000}
-                offset={-70}
-                className={classes.menuEls}
-              >
-                Rules
-              </ScrollLink>
-
-              <ScrollLink
-                to="faq"
-                spy={true}
-                smooth={true}
-                duration={1000}
-                offset={-70}
-                className={classes.menuEls}
-              >
-                FAQ
-              </ScrollLink>
-              <ScrollLink
-                to="contact"
-                spy={true}
-                smooth={true}
-                duration={1000}
-                offset={-70}
-                className={classes.menuEls}
-              >
-                Contact Us
-              </ScrollLink>
+              {menuItemsHome.map((item) => {
+                if (item.type === "button") {
+                  return (
+                    <Button
+                      key={item.text}
+                      href={`/${item.anchor}`}
+                      variant="contained"
+                      size="small"
+                      color="primary"
+                    >
+                      {item.text}
+                    </Button>
+                  );
+                } else if (item.type === "link")
+                  return (
+                    <Link
+                      key={item.text}
+                      href={`#${item.anchor}`}
+                      className={classes.menuEls}
+                      onClick={(e) => {
+                        scrollEl(e, item.anchor);
+                      }}
+                    >
+                      {item.text}
+                    </Link>
+                  );
+              })}
             </Box>
           </Hidden>
           <Hidden mdUp>
@@ -174,110 +167,48 @@ const Main = ({ data }) => {
                 onClose={handleMenuClose}
                 className={classes.mobileMenu}
               >
-                <MenuItem onClick={handleMenuClose}>
-                  <Button
-                    href="#"
-                    fullWidth
-                    color="primary"
-                    variant="contained"
-                    onClickCapture={(e) => {
-                      e.preventDefault();
-                      scroller.scrollTo("submit", {
-                        duration: 1000,
-                        smooth: true,
-                        delay: 0,
-                        offset: -70,
-                      });
-                    }}
-                  >
-                    Submit Film
-                  </Button>
-                </MenuItem>
-                <MenuItem onClick={handleMenuClose}>
-                  <Button
-                    href="#"
-                    fullWidth
-                    color="primary"
-                    variant="text"
-                    onClickCapture={(e) => {
-                      e.preventDefault();
-                      scroller.scrollTo("follow", {
-                        duration: 1000,
-                        smooth: true,
-                        delay: 0,
-                        offset: -70,
-                      });
-                    }}
-                  >
-                    About
-                  </Button>
-                </MenuItem>
-                <MenuItem onClick={handleMenuClose}>
-                  <Button
-                    href="#"
-                    fullWidth
-                    color="primary"
-                    variant="text"
-                    onClickCapture={(e) => {
-                      e.preventDefault();
-                      scroller.scrollTo("rules", {
-                        duration: 1000,
-                        smooth: true,
-                        delay: 0,
-                        offset: -70,
-                      });
-                    }}
-                  >
-                    Rules
-                  </Button>
-                </MenuItem>
-                <MenuItem onClick={handleMenuClose}>
-                  <Button
-                    href="#"
-                    fullWidth
-                    color="primary"
-                    variant="text"
-                    onClickCapture={(e) => {
-                      e.preventDefault();
-                      scroller.scrollTo("faq", {
-                        duration: 1000,
-                        smooth: true,
-                        delay: 0,
-                        offset: -70,
-                      });
-                    }}
-                  >
-                    FAQ
-                  </Button>
-                </MenuItem>
-                <MenuItem onClick={handleMenuClose}>
-                  <Button
-                    href="#"
-                    fullWidth
-                    color="primary"
-                    variant="text"
-                    onClickCapture={(e) => {
-                      e.preventDefault();
-                      scroller.scrollTo("contact", {
-                        duration: 1000,
-                        smooth: true,
-                        delay: 0,
-                        offset: -70,
-                      });
-                    }}
-                  >
-                    Contact us
-                  </Button>
-                </MenuItem>
+                {menuItemsHome.map((item) => (
+                  <MenuItem onClick={handleMenuClose}>
+                    {item.type === "button" && (
+                      <Button
+                        key={item.text}
+                        href={`/${item.anchor}`}
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                      >
+                        {item.text}
+                      </Button>
+                    )}
+                    {item.type === "link" && (
+                      <Button
+                        key={item.text}
+                        fullWidth
+                        color="primary"
+                        variant="text"
+                        onClick={(e) => {
+                          scrollEl(e, item.anchor);
+                        }}
+                      >
+                        {item.text}
+                      </Button>
+                    )}
+                  </MenuItem>
+                ))}
               </Menu>
             </Box>
           </Hidden>
         </Toolbar>
       </AppBar>
       <Switch>
-        <Route to="/" component={(props) => <Home data={data} {...props} />} />
+        <Route path="/submit" component={SubmitForm} />
+        <Route path="/Sharpnerd" component={Sharpnerd} />
+        <Route
+          path="/"
+          component={(props) => <Home data={data} {...props} />}
+        />
       </Switch>
-    </BrowserRouter>
+    </>
   );
 };
 

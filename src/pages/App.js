@@ -2,18 +2,23 @@ import React from "react";
 import "../fire";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
-import { cyan } from "@material-ui/core/colors";
+import { amber, grey } from "@material-ui/core/colors";
 
 import Main from "./Main";
 
 const theme = createMuiTheme({
   palette: {
-    primary: cyan,
-  },
+    primary: amber,
+    secondary: grey,
+    common: {
+      sectionBackground: "#25211f",
+      textColor: "#fff"
+    }
+  }
 });
 
 const data = {
-  fest_name: "Tales in 10",
+  fest_name: "Tales in 10"
 };
 
 function App() {

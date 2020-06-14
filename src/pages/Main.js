@@ -22,7 +22,7 @@ import Home from "./Home";
 const useStyles = makeStyles(theme => {
   return {
     menuBar: {
-      backgroundColor: "#0000006b"
+      backgroundColor: "#000000de"
     },
     toolBar: {
       display: "flex",
@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => {
       borderRadius: theme.spacing(1)
     },
     menuEls: {
-      color: "white"
+      color: theme.palette.common.textColor
     }
   };
 });

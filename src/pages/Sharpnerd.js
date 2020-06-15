@@ -55,6 +55,34 @@ const Sharpnerd = () => {
   return (
     <Container maxWidth={"md"} className={classes.root}>
       <Grid container spacing={4}>
+        <Grid item xs={12} className={classes.aboutUs}>
+          <Box>
+            <Typography variant="h4" component="h3">
+              About
+            </Typography>
+
+            <Typography variant="subtitle1">
+              <p>
+                IFP’s flagship challenge is back! Assemble your crew and get
+                ready to script, shoot, edit and upload a film in just 50 hours.
+                Experience the thrill of creating a film in 50 hours, the
+                tightest and most exuberant deadline you’ll ever experience
+              </p>
+              <p>
+                Your team Size can be 1 to 20 people. Teams can choose any one
+                category to participate – Professional, Amateur or Mobile. The
+                theme will be revealed at the beginning of 50 hours on Sep 25,
+                8pm, IST
+              </p>
+              <p>
+                Over 1.65 Lac filmmakers from over 30 countries participated in
+                our challenge in last 9 years. Be one of them this year and
+                stand a chance to have your work showcased to the best directors
+                and filmmakers in the industry.
+              </p>{" "}
+            </Typography>
+          </Box>
+        </Grid>
         <Grid item xs={12}>
           <Typography variant="h4">The Team</Typography>
         </Grid>

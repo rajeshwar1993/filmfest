@@ -22,6 +22,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Home from "./Home";
 import SubmitForm from "./SubmitForm";
 import Sharpnerd from "./Sharpnerd";
+import Administrator from "./Administrator";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -204,6 +205,7 @@ const Main = ({ data }) => {
       <Switch>
         <Route path="/submit" component={SubmitForm} />
         <Route path="/Sharpnerd" component={Sharpnerd} />
+        <Route path="/administrator" component={Administrator} />
         <Route
           path="/"
           component={(props) => <Home data={data} {...props} />}

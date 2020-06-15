@@ -10,6 +10,7 @@ import {
   ExpansionPanelDetails,
   IconButton,
   Button,
+  Link,
 } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -42,6 +43,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     color: theme.palette.common.white,
   },
+  mainWrapper: {
+    height: "calc(100vh - 64px)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+  },
   titleWrapper: {
     textAlign: "center",
     padding: theme.spacing(3),
@@ -59,9 +66,6 @@ const useStyles = makeStyles((theme) => ({
   },
   partner: {
     textAlign: "center",
-
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(8),
     "& .MuiBox-root": {
       display: "flex",
       justifyContent: "center",
@@ -70,7 +74,6 @@ const useStyles = makeStyles((theme) => ({
       },
     },
     [theme.breakpoints.up("md")]: {
-      marginTop: theme.spacing(12),
       "& .MuiBox-root": {
         display: "flex",
         justifyContent: "center",
@@ -147,7 +150,7 @@ const Home = ({ data }) => {
       <Grid item xs={12} className={classes.imageSection}>
         <Box className={classes.titleBox}>
           <Hidden smDown>
-            <Box>
+            <Box className={classes.mainWrapper}>
               <Box className={classes.titleWrapper}>
                 <Typography
                   variant="h5"
@@ -214,7 +217,7 @@ const Home = ({ data }) => {
             </Box>
           </Hidden>
           <Hidden mdUp>
-            <Box>
+            <Box className={classes.mainWrapper}>
               <Box className={classes.titleWrapper}>
                 <Typography
                   variant="h6"
@@ -302,27 +305,30 @@ const Home = ({ data }) => {
       <Grid item xs={12} className={classes.aboutUs}>
         <Box>
           <Typography variant="h4" component="h3">
-            About
+            {data.fest_name}
           </Typography>
 
           <Typography variant="subtitle1">
             <p>
-              IFP’s flagship challenge is back! Assemble your crew and get ready
-              to script, shoot, edit and upload a film in just 50 hours.
-              Experience the thrill of creating a film in 50 hours, the tightest
-              and most exuberant deadline you’ll ever experience
+              The world we live in is a scary one right now. With theatres and
+              auditoriums closed, film screenings being cancelled left and
+              right, and most films and TV shows shutting down production, the
+              future of media and theatre is currently looking quite
+              handicapped. Despite the nation entering the UNLOCK 1.0 phase,
+              pandemic cases are on a steep rise ever-more and we need to
+              maintain the basic civic sense of social distancing and
+              self-precautions.
             </p>
             <p>
-              Your team Size can be 1 to 20 people. Teams can choose any one
-              category to participate – Professional, Amateur or Mobile. The
-              theme will be revealed at the beginning of 50 hours on Sep 25,
-              8pm, IST
+              But all is not dark. Are you indoors? Feeling bored, restless and
+              about to go out of your mind? Here is a chance to put your skills
+              to the test.
             </p>
             <p>
-              Over 1.65 Lac filmmakers from over 30 countries participated in
-              our challenge in last 9 years. Be one of them this year and stand
-              a chance to have your work showcased to the best directors and
-              filmmakers in the industry.
+              With international theatre events and movie premieres also
+              indefinitely postponed, Sharp_Nerd brings about a short film
+              festival for all you aspirants who wish to make a movie of their
+              own.
             </p>{" "}
           </Typography>
         </Box>
@@ -352,69 +358,10 @@ const Home = ({ data }) => {
         </Box>
       </Grid>
       <Grid id={"rules"} item xs={12} className={classes.dataBoxes}>
-        <Box>
-          <Typography
-            variant="h5"
-            component="h5"
-            style={{ textAlign: "center" }}
-          >
-            Rules
-          </Typography>
-          <Typography variant="subtitle1" component="span">
-            <ol>
-              <li>
-                Upload your film in one of the following:
-                <ul>
-                  <li>Youtube Private Link (Recommended)</li>
-                  <li>Google Drive</li>
-                </ul>
-              </li>
-            </ol>
-          </Typography>
-        </Box>
+        <Rules />
       </Grid>
       <Grid id={"faq"} item xs={12} className={classes.dataBoxes}>
-        <Box>
-          <Typography
-            variant="h5"
-            component="h5"
-            style={{ textAlign: "center" }}
-          >
-            FAQ
-          </Typography>
-          <ExpansionPanel className={classes.faqExpansion}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={"q1"}
-              id={"q1"}
-            >
-              <Typography variant="subtitle1" component="span">
-                Q: Are we going to succeed ?
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Typography variant="body2" component="span">
-                A: Hell Yeah!!
-              </Typography>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls={"q2"}
-              id={"q2"}
-            >
-              <Typography variant="subtitle1" component="span">
-                Q: Do we have any doubts about that?
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Typography variant="body2" component="span">
-                A: Hell Yeah!!
-              </Typography>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        </Box>
+        <FAQ classes={classes} />
       </Grid>
       <Grid id={"contact"} item xs={12} className={classes.contactUs}>
         <Typography variant="h6" component="h3">
@@ -446,3 +393,286 @@ const Home = ({ data }) => {
 };
 
 export default Home;
+
+const Rules = () => {
+  return (
+    <Box>
+      <Typography variant="h5" component="h5" style={{ textAlign: "center" }}>
+        Rules:
+      </Typography>
+      <Typography variant="subtitle1" component="span">
+        <ol>
+          <li>
+            Submit a short film within a duration no longer than{" "}
+            <strong>10 minutes</strong> including opening and end credits.
+          </li>
+          <li>
+            The opening and closing slides provided are to be accommodated in
+            the total duration of the film.
+          </li>
+          <li>
+            You may use any device o record, Mobile phone, DSLR, Action camera
+            (Go Pro or Equivalent), Drone* 1 , or even films.
+          </li>
+          <li>
+            You may use upload the film in one of the following ways:
+            <ul>
+              <li>
+                Youtube Link (Unlisted) - <strong>Recommended</strong>
+              </li>
+              <li>Google Drive Link (Your private google drive)</li>
+            </ul>
+          </li>
+          <li>Use original or royalty free music.</li>
+          <li>
+            Make Payment of{" "}
+            <strong>Rs. 149 (4 EUR for international entry)</strong> in one of
+            the following ways and take a screenshot of the successful payment
+            screen
+            <ul>
+              <li>
+                Indian Entry <strong>(Rs. 149)</strong>
+                <ul>
+                  <li>
+                    Google Pay (number) - <strong>Recommended</strong>
+                  </li>
+                  <li>Paytm (number)</li>
+                </ul>
+              </li>
+              <li>
+                International Entry <strong>(4 EUR)</strong>
+                <ul>
+                  <li>Payment Method</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            Fill in the{" "}
+            <Link
+              href="/submit"
+              color="secondary"
+              style={{ textDecoration: "underline" }}
+            >
+              Submission Form
+            </Link>{" "}
+            with appropriate details and upload the payment screenshot. Please
+            read{" "}
+            <Link
+              href="/submit#howto"
+              color="secondary"
+              style={{ textDecoration: "underline" }}
+            >
+              How to Submit
+            </Link>{" "}
+            section before submission.
+          </li>
+          <li>
+            Films shall be shot while following government norms of Social
+            distancing.
+          </li>
+          <li>
+            The films can be in <strong>ANY</strong> language. All films,
+            irrespective of language should contain subtitles in english.
+            Subtitles can be added in one of the following way:
+            <ul>
+              <li>
+                In film - <strong>Recommended</strong>
+              </li>
+              <li>Separate SRT file - uploaded with Google drive link</li>
+            </ul>
+          </li>
+          <li>
+            Maintain a profanity filter in terms of language and explicit
+            content.
+          </li>
+          <li>
+            The window for submitting your entries closes at 11:59pm (IST) on
+            19th July, 2020.
+          </li>
+          <li>
+            We are all dealing with tough tums and working from home. Please be
+            considerate about the size of your submission with respect to the
+            internet bandwidth. You may have to send just one, but we need to
+            download them all.
+          </li>
+          <li>
+            Please check{" "}
+            <Link
+              href="#faq"
+              color="secondary"
+              style={{ textDecoration: "underline" }}
+            >
+              FAQ
+            </Link>{" "}
+            for any other queries, or feel free to{" "}
+            <Link
+              href="#contact"
+              color="secondary"
+              style={{ textDecoration: "underline" }}
+            >
+              Contact us
+            </Link>
+            .
+          </li>
+        </ol>
+      </Typography>
+    </Box>
+  );
+};
+
+const FAQ = ({ classes }) => {
+  const data = [
+    {
+      q: "I am not from India. Can I participate?",
+      a:
+        "Indeed. We are surviving a global pandemic and we encourage global participation.",
+    },
+    {
+      q: "Is there a registration fee?",
+      a:
+        "The registration fees for each team is Rs. 200 for each team participating from within the national territory of India and €5 for each team participating from beyond the international borders.",
+    },
+    {
+      q: "Are Special Effects allowed?",
+      a:
+        "Yes, you can include special effects. However, no stock footage may be used for this. ",
+    },
+    {
+      q: "What will be the duration of the films?",
+      a:
+        "The films are to be made no longer than 10 minutes. This is because, for a good film produced in this challenge, 4 to 6 minutes is an ideal duration.",
+    },
+    {
+      q: "Does the maximum length of the film include end credits?",
+      a: "Yes, the end credits are included in the duration of your film. ",
+    },
+    {
+      q: "Can I modify the film after the deadline?",
+      a:
+        "Of course, you can modify the film post the deadline. It is your film!",
+    },
+    {
+      q: "How do I upload my film faster?",
+      a:
+        "We would recommend you to render the film at 720p for faster upload results. Also, keeping the file size below 1 GB would make it faster. Third party compression tools like handbrake and such can help compress your videos but use them at your own discretion.",
+    },
+    {
+      q: "Can I send in multiple entries?",
+      a: "Yes, you just need to pay the entry fee for each.",
+    },
+    {
+      q: "What are the films about?",
+      a:
+        "We are dealing with a lockdown and dealing with a global pandemic. The films can be about the current situation, or even act as a distraction from the same. Each team selects its Genre separately. However, creatively there are no limitations on the filmmaker, but competitional – constraints.",
+    },
+    {
+      q: "Who watches these films?",
+      a:
+        "The films made at this festival are screened publicly on the internet. The audience consists of Film buffs, participating teams and their family and friends. These films are also showcased on our website and YouTube channel. Filmmakers can also share these films across their circle.",
+    },
+    {
+      q: "What can be the team size?",
+      a:
+        "The team can have a minimum of 1 person and a maximum of a city. Each team member receives an e-certificate from SHARP_NERD.",
+    },
+    {
+      q: "Can I sponsor this challenge?",
+      a: "Please mail us at sharp_nerd@gmail.com ",
+    },
+    { q: "Is any footage allowed in the end credits?", a: "Yes. " },
+    {
+      q: "Can I use a stock photo?",
+      a: "If you own the rights to the photo, you can use it.",
+    },
+    {
+      q: "Is animation allowed?",
+      a: "Yes, if you wish to make an animated film, go for it!",
+    },
+    {
+      q: "Can we include a title animation or our company logo in the film?",
+      a:
+        "Yes, you can. Provided they are only on screen for less than 10 seconds.",
+    },
+    {
+      q:
+        "What should be the shooting quality, aspect ratio and sound for the film?",
+      a:
+        "The final output should be a MPEG4 file with a resolution of 720p. The aspect ratio should be 16:9. The sound has to be stereo.",
+    },
+    {
+      q: "What language must my film be in? Do I need to add subtitles?",
+      a:
+        "Your film can be in any language. Subtitles are compulsory for all films. You can refer to rules for more specific details about subtitles.",
+    },
+    {
+      q:
+        "I am a participant from out of India. What standard time should we follow for the 50 Hours?",
+      a: "The standard time for the challenge will be Indian Standard Time.",
+    },
+    {
+      q: "I can’t find a team member. Can SHARP_NERD help?",
+      a:
+        "No. The idea is to engage yourself at home while maintaining social-distancing.",
+    },
+    {
+      q:
+        "I am a filmmaker participating with a mobile phone. Can I edit my film on mobile itself?",
+      a: "Sure. It is your film. But maintain the aspect ratio.",
+    },
+    {
+      q: "Do I need a 'Location Release' to shoot on public property?",
+      a:
+        "No, you need a location release only on a privately held property. But we strongly recommend taking permits wherever necessary in the case of public property.",
+    },
+    {
+      q: "Where do I upload the film?",
+      a: "Refer our website. A link will be made available there.",
+    },
+    {
+      q: "Can I use mobile to upload my film?",
+      a:
+        "We highly advise you to use a laptop to upload your film. Mobile connections tend to be inconsistent, leading to delays. Use of a high-speed broadband is definitely a plus!",
+    },
+    {
+      q: "How do you judge so many films?",
+      a:
+        "Each film, according to its category of participation, is sent to three different pre-juries for evaluation, consisting of our team members. The cumulative score from the pre-juries is used to prepare a list of merit. The top films from each category are sent to the final jury for viewing and ranking.",
+    },
+    {
+      q: "Is the judging process transparent?",
+      a:
+        "With our target to involve and engage everyone during this tough time we strive hard to make sure that justice is done to each and every film submitted. We shall make it our best attempt to coordinate with everyone while working remotely. To make sure we do not miss out on any films, the team will also watch these films simultaneously and raises an issue internally if any flaws or biases are found in the process. We do not entertain any requests for paid awards, neither have in the past and nor will in the future, to keep the spirit of competition alive.",
+    },
+  ];
+
+  return (
+    <Box>
+      <Typography variant="h5" component="h5" style={{ textAlign: "center" }}>
+        FAQ
+      </Typography>
+
+      {data.map((d, i) => {
+        return (
+          <ExpansionPanel className={classes.faqExpansion}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={"q" + (i + 1)}
+              id={"q" + (i + 1)}
+              key={i}
+            >
+              <Typography variant="body1" component="span">
+                {`Q: ${d.q}`}
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Typography variant="body2" component="span">
+                {`A: ${d.a}`}
+              </Typography>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        );
+      })}
+    </Box>
+  );
+};

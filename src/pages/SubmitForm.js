@@ -1,7 +1,7 @@
 import React from "react";
 import { db, store } from "../fire";
 import { makeStyles } from "@material-ui/core/styles";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 
 import {
   Container,
@@ -13,60 +13,74 @@ import {
   MenuItem,
   FormHelperText,
   Link,
+  InputAdornment
 } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
+import DeleteIcon from "@material-ui/icons/Delete";
+import AddIcon from "@material-ui/icons/Add";
+
+const useStyles = makeStyles(theme => ({
   root: {
-    paddingTop: theme.spacing(8),
+    paddingTop: theme.spacing(8)
   },
   rules: {
     padding: theme.spacing(2),
     color: theme.palette.common.white,
     [theme.breakpoints.up("md")]: {
-      padding: theme.spacing(4),
-    },
+      padding: theme.spacing(4)
+    }
   },
   rulesWrapper: {
     height: "calc(100% - 32px)",
     padding: theme.spacing(2),
     borderRadius: theme.spacing(1),
-    border: `1px solid ${theme.palette.primary.main}`,
+    border: `1px solid ${theme.palette.primary.main}`
   },
   submit: {
     padding: theme.spacing(2, 0),
     backgroundColor: theme.palette.common.sectionBackground,
     color: theme.palette.primary.main,
     [theme.breakpoints.up("md")]: {
-      padding: theme.spacing(4),
-    },
+      padding: theme.spacing(4)
+    }
   },
   submitWrapper: {
     backgroundColor: "#f5f5f5",
     height: "calc(100% - 32px)",
     padding: theme.spacing(2),
-    borderRadius: theme.spacing(1),
+    borderRadius: theme.spacing(1)
   },
   errorText: {
-    color: "red",
+    color: "red"
   },
+  teamPersonGrid: {
+    margin: theme.spacing(1, 0),
+    padding: theme.spacing(1, 0),
+    border: "1px solid",
+    borderRadius: theme.spacing(1)
+  }
 }));
 
 const SubmitForm = () => {
   const classes = useStyles();
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, control } = useForm();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "team"
+  });
 
   const temp = db.collection("temp");
   const entries = db.collection("entries");
   const payRef = store.ref().child("entries/");
 
-  const uploadInfo = async (data) => {
+  const uploadInfo = async data => {
     try {
       console.log(data);
-
       //data sanitize
       let uploadData = {};
 
-      Object.keys(data).forEach((k) => {
+      Object.keys(data).forEach(k => {
         if (typeof data[k] === "string") {
           uploadData[k] = data[k].trim();
         } else {
@@ -91,7 +105,7 @@ const SubmitForm = () => {
 
       //create a doc(film entry)
       let docRef = await temp.add({
-        ...uploadData,
+        ...uploadData
       });
       if (!docRef.id) {
         //TODO: throw error
@@ -107,7 +121,7 @@ const SubmitForm = () => {
       const filename = "payment_" + docRef + "_image." + ext.toString();
       let uploadRef = payRef.child(filename);
       let metadata = {
-        contentType: fileObj.type,
+        contentType: fileObj.type
       };
 
       //start uploading
@@ -115,12 +129,12 @@ const SubmitForm = () => {
 
       uploadTask.on(
         "state_changed",
-        (snapshot) => {},
-        (error) => {
+        snapshot => {},
+        error => {
           //need to throw error
         },
         () => {
-          uploadTask.snapshot.ref.getDownloadURL().then(async (url) => {
+          uploadTask.snapshot.ref.getDownloadURL().then(async url => {
             //enter the image url in film entry
             //create a doc(film entry)
             console.log(url);
@@ -131,7 +145,7 @@ const SubmitForm = () => {
               pay_verified: false,
               process_done: false,
               yt_link: "",
-              yt_upload: false,
+              yt_upload: false
             });
 
             //delete temp entry
@@ -207,6 +221,21 @@ const SubmitForm = () => {
                     helperText={!!errors.email && "This info is required."}
                   />
                 </Grid>
+
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    fullWidth
+                    type="text"
+                    name={"phone"}
+                    variant="standard"
+                    label={"Team Leader Phone Number *"}
+                    inputRef={register({ required: true })}
+                    error={!!errors.phone}
+                    helperText={!!errors.phone && "This info is required."}
+                  />
+                </Grid>
+                <Grid item xs={false} md={4} />
+                <Grid item xs={false} md={4} />
                 <Grid item xs={12} md={4}>
                   <TextField
                     fullWidth
@@ -252,32 +281,30 @@ const SubmitForm = () => {
                     helperText={!!errors.rt && "This info is required."}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={6}>
                   <TextField
                     name={"synop"}
                     variant="outlined"
                     label={"Film Synopsys *"}
                     placeholder={"Film Synopsys in about 200 words..."}
                     multiline
-                    rows={3}
+                    rows={5}
                     fullWidth
                     inputRef={register({ required: true })}
                     error={!!errors.synop}
                     helperText={!!errors.synop && "This info is required."}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={6}>
                   <TextField
-                    name={"td"}
+                    name={"md"}
                     variant="outlined"
-                    label={"Team Details *"}
-                    placeholder={"Member Name - Role - {Character name if any}"}
+                    label={"Music Used"}
+                    placeholder={"Mention any music that was used in the film."}
                     multiline
-                    rows={4}
+                    rows={5}
                     fullWidth
-                    inputRef={register({ required: true })}
-                    error={!!errors.td}
-                    helperText={!!errors.td && "This info is required."}
+                    inputRef={register}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -311,8 +338,8 @@ const SubmitForm = () => {
                         required: {
                           value: true,
                           message:
-                            "Please upload payment screenshot of Rs 149 by Google Pay / PayTm.",
-                        },
+                            "Please upload payment screenshot of Rs 149 by Google Pay / PayTm."
+                        }
                       })}
                     />
                   </Button>
@@ -327,6 +354,97 @@ const SubmitForm = () => {
                       {errors.paypic.message}
                     </FormHelperText>
                   )}
+                </Grid>
+                <Grid container item xs={12}>
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="h6"
+                      component="span"
+                      style={{ color: "#000" }}
+                    >
+                      Team Details:
+                    </Typography>
+                  </Grid>
+                  {fields.map((item, index) => (
+                    <Grid
+                      container
+                      key={item.id}
+                      spacing={2}
+                      className={classes.teamPersonGrid}
+                    >
+                      <Grid item xs={12} md={4}>
+                        <TextField
+                          type={"text"}
+                          label={"Team Member Name"}
+                          placeholder={"Team Member Name"}
+                          name={`team[${index}].nm`}
+                          inputRef={register({ required: true })}
+                          error={!!errors[`team[${index}].nm`]}
+                          helperText={
+                            !!errors[`team[${index}].nm`] &&
+                            "This info is required."
+                          }
+                          fullWidth
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                {index + 1}.
+                              </InputAdornment>
+                            )
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={3}>
+                        <TextField
+                          type={"email"}
+                          label={"Team Member E-mail"}
+                          name={`team[${index}].em`}
+                          inputRef={register({ required: true })}
+                          error={!!errors[`team[${index}].em`]}
+                          helperText={
+                            !!errors[`team[${index}].em`] &&
+                            "This info is required."
+                          }
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={3}>
+                        <TextField
+                          type={"text"}
+                          label={"Team Member Role"}
+                          placeholder={"eg: Director, Actor etc"}
+                          name={`team[${index}].role`}
+                          inputRef={register({ required: true })}
+                          error={!!errors[`team[${index}].role`]}
+                          helperText={
+                            !!errors[`team[${index}].role`] &&
+                            "This info is required."
+                          }
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={2}>
+                        <Button
+                          color="danger"
+                          variant="outlined"
+                          onClick={() => remove(index)}
+                          startIcon={<DeleteIcon />}
+                        >
+                          Remove
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  ))}
+                  <Grid item xs={12} lg={4}>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      onClick={() => append({ name: "exp" })}
+                      startIcon={<AddIcon />}
+                    >
+                      Add Team Member
+                    </Button>
+                  </Grid>
                 </Grid>
                 <Grid item xs={12}>
                   <Button

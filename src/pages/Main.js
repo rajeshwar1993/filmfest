@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import firebase from "firebase";
 import { Switch, Route, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { scroller } from "react-scroll";
 
@@ -15,7 +17,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Link,
+  Link
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
@@ -24,31 +26,33 @@ import SubmitForm from "./SubmitForm";
 import Sharpnerd from "./Sharpnerd";
 import Administrator from "./Administrator";
 
-const useStyles = makeStyles((theme) => {
+import { login } from "../components/actions";
+
+const useStyles = makeStyles(theme => {
   return {
     menuBar: {
-      backgroundColor: "#000000de",
+      backgroundColor: "#000000de"
     },
     toolBar: {
       display: "flex",
-      justifyContent: "space-between",
+      justifyContent: "space-between"
     },
     logoWrapper: {
       backgroundColor: "#0000006b",
       borderRadius: theme.spacing(1),
       "& .MuiTypography-root": {
         padding: theme.spacing(1, 2),
-        color: theme.palette.common.white,
-      },
+        color: theme.palette.common.white
+      }
     },
     mobileMenuButton: {
       backgroundColor: "#0000006b",
-      borderRadius: theme.spacing(3),
+      borderRadius: theme.spacing(3)
     },
     mobileMenu: {
       "& .MuiPaper-root": {
-        backgroundColor: theme.palette.common.sectionBackground,
-      },
+        backgroundColor: theme.palette.common.sectionBackground
+      }
     },
     menuOpts: {
       width: "35vw",
@@ -58,17 +62,17 @@ const useStyles = makeStyles((theme) => {
       display: "flex",
       justifyContent: "space-around",
       alignItems: "center",
-      borderRadius: theme.spacing(1),
+      borderRadius: theme.spacing(1)
     },
     menuEls: {
       color: theme.palette.common.textColor,
       cursor: "pointer",
       [theme.breakpoints.up("md")]: {
         "&:hover": {
-          textDecoration: "underline",
-        },
-      },
-    },
+          textDecoration: "underline"
+        }
+      }
+    }
   };
 });
 
@@ -79,16 +83,28 @@ const menuItemsHome = [
   { text: "Rules", anchor: "rules", type: "link" },
   { text: "FAQ", anchor: "faq", type: "link" },
   { text: "Contact", anchor: "contact", type: "link" },
-  { text: "Sharpnerd", anchor: "Sharpnerd", type: "button" },
+  { text: "Sharpnerd", anchor: "Sharpnerd", type: "button" }
 ];
 
 const Main = ({ data }) => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const openMenu = (e) => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user && user.uid && user.email) {
+      console.log("Found user:", user);
+      //toggleIsLoggedIn({ uid: user.uid, email: user.email });
+      dispatch(login({ uid: user.uid, email: user.email }));
+    } else {
+      console.log("Login user not found");
+      //dispatch(toggle_loading(false));
+    }
+  });
+
+  const openMenu = e => {
     setAnchorEl(e.currentTarget);
   };
 
@@ -104,7 +120,7 @@ const Main = ({ data }) => {
       duration: 1000,
       smooth: true,
       delay: 0,
-      offset: -70,
+      offset: -70
     });
   };
 
@@ -117,11 +133,11 @@ const Main = ({ data }) => {
               <Typography variant="h6">{data.fest_name}</Typography>
             </Box>
             <Box className={classes.menuOpts}>
-              {menuItemsHome.map((item) => {
+              {menuItemsHome.map(item => {
                 if (item.type === "button") {
                   return (
                     <Button
-                      key={item.text}
+                      key={"d-" + item.text}
                       href={`/${item.anchor}`}
                       variant="contained"
                       size="small"
@@ -133,10 +149,10 @@ const Main = ({ data }) => {
                 } else if (item.type === "link")
                   return (
                     <Link
-                      key={item.text}
+                      key={"d-" + item.text}
                       href={`#${item.anchor}`}
                       className={classes.menuEls}
-                      onClick={(e) => {
+                      onClick={e => {
                         scrollEl(e, item.anchor);
                       }}
                     >
@@ -168,11 +184,11 @@ const Main = ({ data }) => {
                 onClose={handleMenuClose}
                 className={classes.mobileMenu}
               >
-                {menuItemsHome.map((item) => (
+                {menuItemsHome.map(item => (
                   <MenuItem onClick={handleMenuClose}>
                     {item.type === "button" && (
                       <Button
-                        key={item.text}
+                        key={"m-" + item.text}
                         href={`/${item.anchor}`}
                         variant="contained"
                         color="primary"
@@ -184,11 +200,11 @@ const Main = ({ data }) => {
                     {item.type === "link" && (
                       <Button
                         href={`#${item.anchor}`}
-                        key={item.text}
+                        key={"m-" + item.text}
                         fullWidth
                         color="primary"
                         variant="text"
-                        onClick={(e) => {
+                        onClick={e => {
                           scrollEl(e, item.anchor);
                         }}
                       >
@@ -205,11 +221,11 @@ const Main = ({ data }) => {
       <Switch>
         <Route path="/submit" component={SubmitForm} />
         <Route path="/Sharpnerd" component={Sharpnerd} />
-        <Route path="/administrator" component={Administrator} />
         <Route
-          path="/"
-          component={(props) => <Home data={data} {...props} />}
+          path="/administrator"
+          component={props => <Administrator {...props} />}
         />
+        <Route path="/" component={props => <Home data={data} {...props} />} />
       </Switch>
     </>
   );

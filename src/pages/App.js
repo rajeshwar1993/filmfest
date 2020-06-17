@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import "../fire";
 import { BrowserRouter } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 import { amber, indigo } from "@material-ui/core/colors";
 
@@ -27,7 +28,10 @@ const data = {
 };
 
 function App() {
-  const store = createStore(rootReducer, applyMiddleware(thunk));
+  const store = createStore(
+    rootReducer,
+    composeWithDevTools(applyMiddleware(thunk))
+  );
 
   return (
     <div className="App" style={{ backgroundColor: "#25211f" }}>

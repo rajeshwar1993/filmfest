@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import firebase from "firebase";
 import { db, store } from "../fire";
 import { makeStyles } from "@material-ui/core/styles";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 
 import {
   Container,
@@ -13,11 +14,17 @@ import {
   MenuItem,
   FormHelperText,
   Link,
-  InputAdornment
+  InputAdornment,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  CircularProgress
 } from "@material-ui/core";
 
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddIcon from "@material-ui/icons/Add";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -63,7 +70,13 @@ const useStyles = makeStyles(theme => ({
 
 const SubmitForm = () => {
   const classes = useStyles();
-  const { register, handleSubmit, errors, control } = useForm();
+
+  const [isLoading, toggleIsLoading] = useState(false);
+  const [isPayPic, toggleIsPayPic] = useState(false);
+  const [dialogIsOpen, toggleDialogIsOpen] = useState(false);
+  const [dialogObj, updateDialogObj] = useState({});
+
+  const { register, handleSubmit, errors, control, reset } = useForm();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -74,9 +87,20 @@ const SubmitForm = () => {
   const entries = db.collection("entries");
   const payRef = store.ref().child("entries/");
 
+  const handleClose = (event, reason) => {
+    if (reason !== "backdropClick") {
+      toggleDialogIsOpen(false);
+      updateDialogObj({});
+      reset();
+    }
+  };
+
   const uploadInfo = async data => {
     try {
       console.log(data);
+      toggleIsLoading(true);
+
+      toggleDialogIsOpen(true);
       //data sanitize
       let uploadData = {};
 
@@ -90,6 +114,8 @@ const SubmitForm = () => {
 
       //remove the paypic from this upload
       uploadData.paypic = "";
+      //adding timestamp
+      uploadData.ts = firebase.firestore.FieldValue.serverTimestamp();
 
       //check for duplicate - film name, email id, team name
       let q = entries
@@ -110,6 +136,11 @@ const SubmitForm = () => {
       if (!docRef.id) {
         //TODO: throw error
         console.log("Submission unsuccessful :(");
+        toggleIsLoading(false);
+        updateDialogObj({
+          error: true,
+          message: "Could not write in Temp DB."
+        });
         return;
       }
       docRef = docRef.id;
@@ -132,6 +163,11 @@ const SubmitForm = () => {
         snapshot => {},
         error => {
           //need to throw error
+          toggleIsLoading(false);
+          updateDialogObj({
+            error: true,
+            message: "Could not write payment image in Storage."
+          });
         },
         () => {
           uploadTask.snapshot.ref.getDownloadURL().then(async url => {
@@ -140,7 +176,7 @@ const SubmitForm = () => {
             console.log(url);
             await entries.doc(docRef).set({
               ...uploadData,
-              paypic: url,
+              paypic: { url, verified: false, issue: false },
               scr_time: "",
               pay_verified: false,
               process_done: false,
@@ -150,16 +186,61 @@ const SubmitForm = () => {
 
             //delete temp entry
             await temp.doc(docRef).delete();
+            toggleIsLoading(false);
+            updateDialogObj({ error: false });
           });
         }
       );
     } catch (err) {
       console.log(err);
+      toggleIsLoading(false);
+      updateDialogObj({ error: true, message: err.message });
     }
   };
 
   return (
     <Container maxWidth={"md"} className={classes.root}>
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="simple-dialog-title"
+        open={dialogIsOpen}
+        maxWidth={"lg"}
+        className={classes.imageDialog}
+      >
+        <DialogTitle id="title">{"Submission Status"}</DialogTitle>
+        <DialogContent>
+          {isLoading && <CircularProgress />}
+          {!isLoading && !dialogObj.error && (
+            <Typography
+              variant="h5"
+              component="h5"
+              style={{ color: "#07a465" }}
+            >
+              Submission Successful!!
+            </Typography>
+          )}
+          {!isLoading && dialogObj.error && (
+            <>
+              <Typography variant="h5" component="h5" style={{ color: "red" }}>
+                Submission Unuccessful!!
+              </Typography>
+              <Typography variant="h6" component="h6">
+                {dialogObj.message}
+              </Typography>
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleClose}
+            color="primary"
+            variant="contained"
+            disabled={isLoading}
+          >
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Grid item xs={12} className={classes.submit}>
         <Box className={classes.submitWrapper}>
           <Box>
@@ -248,26 +329,27 @@ const SubmitForm = () => {
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <TextField
-                    select
-                    label={"Film Genre *"}
+                  <Controller
                     name={"genre"}
-                    inputRef={register({ required: true })}
-                    fullWidth
-                    error={!!errors.genre}
-                    helperText={!!errors.genre && "This info is required."}
-                  >
-                    <MenuItem value={"sel"} disabled>
-                      Genre
-                    </MenuItem>
-                    <MenuItem value={"Drama"}>Drama</MenuItem>
-                    <MenuItem value={"Comedy"}>Comedy</MenuItem>
-                    <MenuItem value={"Horror"}>Horror</MenuItem>
-                    <MenuItem value={"Action"}>Action</MenuItem>
-                    <MenuItem value={"Musical/Dance"}>Musical/Dance</MenuItem>
-                    <MenuItem value={"Adventure"}>Adventure</MenuItem>
-                    <MenuItem value={"Other"}>Other</MenuItem>
-                  </TextField>
+                    control={control}
+                    rules={{ required: true }}
+                    as={
+                      <TextField select label={"Film Genre *"} fullWidth>
+                        <MenuItem value={"Drama"}>Drama</MenuItem>
+                        <MenuItem value={"Comedy"}>Comedy</MenuItem>
+                        <MenuItem value={"Horror"}>Horror</MenuItem>
+                        <MenuItem value={"Action"}>Action</MenuItem>
+                        <MenuItem value={"Musical/Dance"}>
+                          Musical/Dance
+                        </MenuItem>
+                        <MenuItem value={"Adventure"}>Adventure</MenuItem>
+                        <MenuItem value={"Other"}>Other</MenuItem>
+                      </TextField>
+                    }
+                  />
+                  <FormHelperText>
+                    {!!errors.genre && "This info is required."}
+                  </FormHelperText>
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <TextField
@@ -309,6 +391,7 @@ const SubmitForm = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    type="url"
                     name={"link"}
                     variant="standard"
                     label={"Film Link *"}
@@ -341,6 +424,10 @@ const SubmitForm = () => {
                             "Please upload payment screenshot of Rs 149 by Google Pay / PayTm."
                         }
                       })}
+                      onChange={e => {
+                        if (e.nativeEvent.target.files.length > 0)
+                          toggleIsPayPic(true);
+                      }}
                     />
                   </Button>
                   {!errors.paypic && (
@@ -353,6 +440,13 @@ const SubmitForm = () => {
                     <FormHelperText className={classes.errorText}>
                       {errors.paypic.message}
                     </FormHelperText>
+                  )}
+                </Grid>
+                <Grid item xs={4} md={6}>
+                  {isPayPic && (
+                    <CheckCircleIcon
+                      style={{ fontSize: 40, color: "#07a465" }}
+                    />
                   )}
                 </Grid>
                 <Grid container item xs={12}>
@@ -375,7 +469,7 @@ const SubmitForm = () => {
                       <Grid item xs={12} md={4}>
                         <TextField
                           type={"text"}
-                          label={"Team Member Name"}
+                          label={"Team Member Name *"}
                           placeholder={"Team Member Name"}
                           name={`team[${index}].nm`}
                           inputRef={register({ required: true })}
@@ -397,7 +491,7 @@ const SubmitForm = () => {
                       <Grid item xs={12} md={3}>
                         <TextField
                           type={"email"}
-                          label={"Team Member E-mail"}
+                          label={"Team Member E-mail *"}
                           name={`team[${index}].em`}
                           inputRef={register({ required: true })}
                           error={!!errors[`team[${index}].em`]}
@@ -411,7 +505,7 @@ const SubmitForm = () => {
                       <Grid item xs={12} md={3}>
                         <TextField
                           type={"text"}
-                          label={"Team Member Role"}
+                          label={"Team Member Role *"}
                           placeholder={"eg: Director, Actor etc"}
                           name={`team[${index}].role`}
                           inputRef={register({ required: true })}

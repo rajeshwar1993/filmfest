@@ -37,6 +37,13 @@ export const set_all_entries = data => {
   };
 };
 
+export const update_entry = data => {
+  return {
+    type: "UPDATE",
+    data
+  };
+};
+
 export const clear_all_entries = data => {
   return {
     type: "CLEAR_ALL",
@@ -61,10 +68,10 @@ export const stop_entry_loading = data => {
 export const fetch_all_entries = () => {
   return dispatch => {
     entriesDB
+      .orderBy("ts")
       .get()
       .then(snap => {
         let entries = [];
-        console.log(snap);
         if (!snap.empty) {
           snap.forEach(d => {
             entries.push({
@@ -73,8 +80,23 @@ export const fetch_all_entries = () => {
             });
           });
         }
-        console.log(entries);
         dispatch(set_all_entries(entries));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+};
+
+export const update_entry_db = (id, data) => {
+  return dispatch => {
+    entriesDB
+      .doc(id)
+      .update({
+        ...data
+      })
+      .then(() => {
+        dispatch(update_entry({ id, data }));
       })
       .catch(err => {
         console.log(err);

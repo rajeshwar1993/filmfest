@@ -47,6 +47,18 @@ export const entriesReducer = (state = entriesState, action) => {
       temp.entryItems = action.data;
       return temp;
 
+    case "UPDATE":
+      temp.entryItems = temp.entryItems.map(item => {
+        if (item.id === action.data.id) {
+          return {
+            ...item,
+            ...action.data.data
+          };
+        }
+        return item;
+      });
+      return temp;
+
     case "CLEAR_ALL":
       temp.entryItems = [];
       return temp;

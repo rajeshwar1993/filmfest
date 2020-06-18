@@ -67,6 +67,7 @@ export const stop_entry_loading = data => {
 
 export const fetch_all_entries = () => {
   return dispatch => {
+    dispatch(start_entry_loading());
     entriesDB
       .orderBy("ts")
       .get()
@@ -81,15 +82,18 @@ export const fetch_all_entries = () => {
           });
         }
         dispatch(set_all_entries(entries));
+        dispatch(stop_entry_loading());
       })
       .catch(err => {
         console.log(err);
+        dispatch(stop_entry_loading());
       });
   };
 };
 
 export const update_entry_db = (id, data) => {
   return dispatch => {
+    dispatch(start_entry_loading());
     entriesDB
       .doc(id)
       .update({
@@ -97,9 +101,11 @@ export const update_entry_db = (id, data) => {
       })
       .then(() => {
         dispatch(update_entry({ id, data }));
+        dispatch(stop_entry_loading());
       })
       .catch(err => {
         console.log(err);
+        dispatch(stop_entry_loading());
       });
   };
 };

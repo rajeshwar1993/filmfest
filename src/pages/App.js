@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-import { amber, indigo } from "@material-ui/core/colors";
+import { amber, indigo, red } from "@material-ui/core/colors";
 
 import Main from "./Main";
 import rootReducer from "../components/redux";
@@ -16,6 +16,12 @@ const theme = createMuiTheme({
   palette: {
     primary: amber,
     secondary: indigo,
+    danger: {
+      light: red[200],
+      main: red[600],
+      dark: red[900],
+      contrastText: "#fff"
+    },
     common: {
       sectionBackground: "#25211f",
       textColor: "#fff"

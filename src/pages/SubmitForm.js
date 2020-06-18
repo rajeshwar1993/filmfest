@@ -19,7 +19,9 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  CircularProgress
+  CircularProgress,
+  FormControlLabel,
+  Checkbox
 } from "@material-ui/core";
 
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -75,6 +77,7 @@ const SubmitForm = () => {
   const [isPayPic, toggleIsPayPic] = useState(false);
   const [dialogIsOpen, toggleDialogIsOpen] = useState(false);
   const [dialogObj, updateDialogObj] = useState({});
+  const [readRules, toggleReadRules] = useState(false);
 
   const { register, handleSubmit, errors, control, reset } = useForm();
 
@@ -126,6 +129,11 @@ const SubmitForm = () => {
       if (!docs.empty) {
         //TODO: throw error
         console.log("Duplicate entry exists!");
+        toggleIsLoading(false);
+        updateDialogObj({
+          error: true,
+          message: "Same entry exists!"
+        });
         return;
       }
 
@@ -174,18 +182,12 @@ const SubmitForm = () => {
             //enter the image url in film entry
             //create a doc(film entry)
             console.log(url);
-            await entries.doc(docRef).set({
-              ...uploadData,
-              paypic: { url, verified: false, issue: false },
-              scr_time: "",
-              pay_verified: false,
-              process_done: false,
-              yt_link: "",
-              yt_upload: false
+            await temp.doc(docRef).update({
+              paypic: { url, verified: false, issue: false }
             });
 
             //delete temp entry
-            await temp.doc(docRef).delete();
+            //await temp.doc(docRef).delete();
             toggleIsLoading(false);
             updateDialogObj({ error: false });
           });
@@ -306,7 +308,7 @@ const SubmitForm = () => {
                 <Grid item xs={12} md={4}>
                   <TextField
                     fullWidth
-                    type="text"
+                    type="number"
                     name={"phone"}
                     variant="standard"
                     label={"Team Leader Phone Number *"}
@@ -541,11 +543,37 @@ const SubmitForm = () => {
                   </Grid>
                 </Grid>
                 <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={readRules}
+                        onChange={() => {
+                          toggleReadRules(!readRules);
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography variant="body2" style={{ color: "#000" }}>
+                        I have read and followed all the competition{" "}
+                        <Link href="/#rules" color="secondary">
+                          Rules
+                        </Link>
+                        . I have also followed all the steps mentioned in the{" "}
+                        <Link color="secondary" href="#howto">
+                          How to Submit
+                        </Link>{" "}
+                        Section.
+                      </Typography>
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12}>
                   <Button
                     type="submit"
                     fullWidth
                     variant="contained"
                     color="primary"
+                    disabled={!readRules}
                   >
                     Submit
                   </Button>

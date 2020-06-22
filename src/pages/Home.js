@@ -13,7 +13,11 @@ import {
   Link,
 } from "@material-ui/core";
 
+import logo1 from "../images/V_RL.png";
+import logo1_1 from "../images/V_RL2.png";
+import logo1_2 from "../images/V_RL3.png";
 import logo2 from "../images/H_R.png";
+import logo3 from "../images/O10.png";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -58,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "flex-end",
     [theme.breakpoints.up("md")]: {
-      marginLeft: "7%",
+      marginLeft: "15%",
       justifyContent: "space-evenly",
     },
   },
@@ -69,6 +73,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(8),
     [theme.breakpoints.up("md")]: {
       marginBottom: "0",
+    },
+    "& h1": {
+      margin: "5px 0",
     },
   },
   title: {
@@ -168,13 +175,37 @@ const Home = ({ data }) => {
                   component="h2"
                   className={classes.title}
                 >
-                  Sharp_Nerd Presents
+                  SHARP_NER<i>d</i> Presents
                 </Typography>
-                <img
-                  src={logo2}
-                  alt={data.fest_name}
-                  style={{ height: "70px", margin: "10px 0" }}
-                />
+                <h1>
+                  <img
+                    src={logo1}
+                    alt={data.fest_name}
+                    style={{
+                      height: "430px",
+                      margin: "10px 0",
+                      display: "none",
+                    }}
+                  />
+                  <img
+                    src={logo1_1}
+                    alt={data.fest_name}
+                    style={{
+                      height: "430px",
+                      margin: "10px 0",
+                      display: "none",
+                    }}
+                  />
+                  <img
+                    src={logo1_2}
+                    alt={data.fest_name}
+                    style={{
+                      height: "430px",
+                      margin: "10px 0",
+                      display: "none",
+                    }}
+                  />
+                </h1>
                 {/* <Typography
                   variant="h1"
                   component="h1"
@@ -182,13 +213,13 @@ const Home = ({ data }) => {
                 >
                   {data.fest_name}
                 </Typography> */}
-                <Typography
+                {/* <Typography
                   variant="h4"
                   component="h3"
                   className={classes.title}
                 >
                   Short Film Festival
-                </Typography>
+                </Typography> */}
                 <Typography
                   variant="h6"
                   component="h6"
@@ -242,13 +273,15 @@ const Home = ({ data }) => {
                   component="h2"
                   className={classes.title}
                 >
-                  Sharp_Nerd Presents
+                  SHARP_NER<i>d</i> Presents
                 </Typography>
-                <img
-                  src={logo2}
-                  alt={data.fest_name}
-                  style={{ height: "50px", margin: "10px 0" }}
-                />
+                <h1>
+                  <img
+                    src={logo2}
+                    alt={data.fest_name}
+                    style={{ height: "50px", margin: " 0" }}
+                  />
+                </h1>
                 {/* <Typography
                   variant="h2"
                   component="h1"
@@ -366,7 +399,7 @@ const Home = ({ data }) => {
       <Grid id={"about"} item xs={12} className={classes.aboutUs}>
         <Box>
           <Typography variant="h4" component="h3">
-            {data.fest_name}
+            Tales in <img src={logo3} style={{ height: "34px" }} />
           </Typography>
 
           <Typography variant="subtitle1">
@@ -407,19 +440,18 @@ const Home = ({ data }) => {
             The timeline is as follows:
             <ul>
               <li>
-                Submisssions begin -{" "}
-                <strong>10:00am (IST), 15 July 2020</strong>
+                Submissions begin - <strong>10:00am (IST), 15 July 2020</strong>
               </li>
               <li>
-                Last day for film submission -{" "}
+                Submissions close -{" "}
                 <strong>11:59pm (IST), 02 August 2020</strong>
               </li>
               <li>
-                Film Screening - <strong>15 and 16 of August, 2020</strong> -
-                (Time TBA)
+                Film Screening -{" "}
+                <strong> (Time TBA) 15 and 16 of August, 2020</strong>
               </li>
               <li>
-                Prize Distribution - <strong>30 August, 2020</strong>
+                Festival Results, Valediction - <strong>30 August, 2020</strong>
               </li>
             </ul>
           </Typography>
@@ -480,7 +512,7 @@ const Rules = () => {
           </li>
           <li>
             You may use any device to record, Mobile phone, DSLR, Action camera
-            (Go Pro or Equivalent), Drone , or even films.
+            (Go Pro or Equivalent), Drone* , or even films.
           </li>
           <li>
             You may submit films previously made by you/your team which follow
@@ -681,6 +713,11 @@ const FAQ = ({ classes }) => {
       q:
         "I am a filmmaker participating with a mobile phone. Can I edit my film on mobile itself?",
       a: "Sure. It is your film. But maintain the aspect ratio.",
+    },
+    {
+      q: "Are we allowed to use Drones to shoot the film?",
+      a:
+        "Sure, but check with your local authorities and the guidelines issued by the government about flying drones. Our Tales in 10 team or SHARP_NERd team will not be responsible for any mishap that may be faced by you from your local laws.",
     },
     {
       q: "Do I need a 'Location Release' to shoot on public property?",

@@ -40,11 +40,11 @@ const useStyles = makeStyles((theme) => {
     logoWrapper: {
       backgroundColor: "#0000006b",
       borderRadius: theme.spacing(1),
-      "& .MuiTypography-root": {
-        padding: theme.spacing(1, 2),
-        color: theme.palette.common.white,
-        fontWeight: 500,
-      },
+      // "& .MuiTypography-root": {
+      //   padding: theme.spacing(1, 2),
+      //   color: theme.palette.common.white,
+      //   fontWeight: 500,
+      // },
     },
     mobileMenuButton: {
       backgroundColor: "#0000006b",
@@ -131,9 +131,9 @@ const Main = ({ data }) => {
         <Toolbar className={classes.toolBar}>
           <Hidden smDown>
             <Box className={classes.logoWrapper}>
-              <Typography variant="h6">
-                <Link href="/">{data.fest_name}</Link>
-              </Typography>
+              <Link href="/">
+                <img src={logo2} style={{ height: "30px" }} />
+              </Link>
             </Box>
             <Box className={classes.menuOpts}>
               {menuItemsHome.map((item) => {
@@ -167,9 +167,9 @@ const Main = ({ data }) => {
           </Hidden>
           <Hidden mdUp>
             <Box className={classes.logoWrapper}>
-              <Typography variant="body1">
-                <Link href="/">{data.fest_name}</Link>
-              </Typography>
+              <Link href="/">
+                <img src={logo2} style={{ height: "20px" }} />
+              </Link>
             </Box>
             <Box className={classes.mobileMenuButton}>
               <IconButton

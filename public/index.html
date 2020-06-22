@@ -5,7 +5,10 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="An online film festival!" />
+    <meta
+      name="description"
+      content="Calling all filmakers and film enthusiasts! The online film festival is here. Stay safe and Make films!"
+    />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -21,11 +24,45 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Film Festival</title>
+    <title>Film Festival | Tales in 10 | Sharpnerd</title>
+    <style>
+      body {
+        background-color: #091213;
+      }
+      .toHide {
+        color: #091213;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <main class="toHide">
+        <article itemscope itemtype="http://schema.org/Event">
+          <div itemtype="http://schema.org/Thing">
+            <h1 itemtype="http://schema.org/Text" itemprop="name">
+              Tales in 10
+            </h1>
+            <h2 itemtype="http://schema.org/Text" itemprop="alternateName">
+              Sharp_nerd
+            </h2>
+            <span itemtype="http://schema.org/Text" itemtype="description"
+              >Calling all filmakers and film enthusiasts! The online film
+              festival is here. Stay safe and Make films!</span
+            >
+          </div>
+          <span itemtype="http://schema.org/Date" itemtype="startDate"
+            >15 July, 2020</span
+          >
+          <span itemtype="http://schema.org/Date" itemtype="endDate"
+            >02 August, 2020</span
+          >
+          <span itemtype="http://schema.org/Organization" itemtype="organizer"
+            >Sharp_nerd</span
+          >
+        </article>
+      </main>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

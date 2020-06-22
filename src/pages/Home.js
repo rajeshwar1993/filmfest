@@ -10,8 +10,10 @@ import {
   ExpansionPanelDetails,
   IconButton,
   Button,
-  Link
+  Link,
 } from "@material-ui/core";
+
+import logo2 from "../images/H_R.png";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -22,16 +24,20 @@ import InstagramIcon from "@material-ui/icons/Instagram";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import YouTubeIcon from "@material-ui/icons/YouTube";
 import EmailIcon from "@material-ui/icons/Email";
-import PhoneIcon from "@material-ui/icons/Phone";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {},
   imageSection: {
     height: "100vh",
     backgroundImage:
       "url(https://images.pexels.com/photos/3379942/pexels-photo-3379942.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260)",
-    backgroundSize: "cover",
-    backgroundPosition: "center"
+    backgroundSize: "330%",
+    backgroundPosition: "43% 94%",
+    [theme.breakpoints.up("md")]: {
+      backgroundPosition: "-50%",
+      backgroundSize: "120%",
+      backgroundRepeat: "no-repeat",
+    },
   },
   titleBox: {
     height: "100%",
@@ -41,28 +47,32 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     justifyContent: "flex-end",
     alignItems: "center",
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
+    [theme.breakpoints.up("md")]: {
+      alignItems: "flex-start",
+    },
   },
   mainWrapper: {
     height: "calc(100vh - 64px)",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-evenly"
+    justifyContent: "flex-end",
+    [theme.breakpoints.up("md")]: {
+      marginLeft: "7%",
+      justifyContent: "space-evenly",
+    },
   },
   titleWrapper: {
     textAlign: "center",
     padding: theme.spacing(3),
     borderRadius: theme.spacing(1),
-    backgroundColor: "#19181859",
-    transition: "1s",
+    marginBottom: theme.spacing(8),
     [theme.breakpoints.up("md")]: {
-      "&:hover": {
-        backgroundColor: "#000000d9"
-      }
-    }
+      marginBottom: "0",
+    },
   },
   title: {
-    color: theme.palette.common.textColor
+    color: theme.palette.common.textColor,
   },
   partner: {
     display: "none",
@@ -71,18 +81,18 @@ const useStyles = makeStyles(theme => ({
       display: "flex",
       justifyContent: "center",
       "& img": {
-        maxWidth: "100px"
-      }
+        maxWidth: "100px",
+      },
     },
     [theme.breakpoints.up("md")]: {
       "& .MuiBox-root": {
         display: "flex",
         justifyContent: "center",
         "& img": {
-          maxWidth: "300px"
-        }
-      }
-    }
+          maxWidth: "300px",
+        },
+      },
+    },
   },
   aboutUs: {
     padding: theme.spacing(5, 3),
@@ -95,35 +105,35 @@ const useStyles = makeStyles(theme => ({
       color: theme.palette.common.textColor,
       [theme.breakpoints.up("md")]: {
         width: "50vw",
-        margin: "0 auto"
-      }
-    }
+        margin: "0 auto",
+      },
+    },
   },
   followUs: {
     padding: theme.spacing(2, 3),
     textAlign: "center",
     backgroundColor: theme.palette.common.sectionBackground,
-    color: theme.palette.common.textColor
+    color: theme.palette.common.textColor,
   },
   contactUs: {
     padding: theme.spacing(2, 3, 7),
     textAlign: "center",
     backgroundColor: theme.palette.common.sectionBackground,
-    color: theme.palette.common.textColor
+    color: theme.palette.common.textColor,
   },
   submitSection: {
-    backgroundColor: theme.palette.common.sectionBackground
+    backgroundColor: theme.palette.common.sectionBackground,
   },
   faqExpansion: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   knowMore: {
     marginTop: theme.spacing(2),
     color: theme.palette.primary.main,
     "&:hover": {
       textDecoration: "underline",
-      cursor: "pointer"
-    }
+      cursor: "pointer",
+    },
   },
   dataBoxes: {
     padding: theme.spacing(5, 3),
@@ -137,10 +147,10 @@ const useStyles = makeStyles(theme => ({
       color: theme.palette.common.textColor,
       [theme.breakpoints.up("md")]: {
         width: "50vw",
-        margin: "0 auto"
-      }
-    }
-  }
+        margin: "0 auto",
+      },
+    },
+  },
 }));
 
 const Home = ({ data }) => {
@@ -160,13 +170,18 @@ const Home = ({ data }) => {
                 >
                   Sharp_Nerd Presents
                 </Typography>
-                <Typography
+                <img
+                  src={logo2}
+                  alt={data.fest_name}
+                  style={{ height: "70px", margin: "10px 0" }}
+                />
+                {/* <Typography
                   variant="h1"
                   component="h1"
                   className={classes.title}
                 >
                   {data.fest_name}
-                </Typography>
+                </Typography> */}
                 <Typography
                   variant="h4"
                   component="h3"
@@ -180,12 +195,12 @@ const Home = ({ data }) => {
                   className={classes.knowMore}
                 >
                   <Button
-                    href="/submit"
+                    href="/#about"
                     color="primary"
                     variant="outlined"
                     size="large"
                   >
-                    Submit Film
+                    Know more
                   </Button>
                 </Typography>
               </Box>
@@ -229,13 +244,18 @@ const Home = ({ data }) => {
                 >
                   Sharp_Nerd Presents
                 </Typography>
-                <Typography
+                <img
+                  src={logo2}
+                  alt={data.fest_name}
+                  style={{ height: "50px", margin: "10px 0" }}
+                />
+                {/* <Typography
                   variant="h2"
                   component="h1"
                   className={classes.title}
                 >
                   {data.fest_name}
-                </Typography>
+                </Typography> */}
                 <Typography
                   variant="h5"
                   component="h3"
@@ -248,8 +268,8 @@ const Home = ({ data }) => {
                   component="h6"
                   className={classes.knowMore}
                 >
-                  <Button href="/submit" color="primary" variant="outlined">
-                    Submit Film
+                  <Button href="/#about" color="primary" variant="outlined">
+                    Know More
                   </Button>
                 </Typography>
               </Box>
@@ -572,120 +592,120 @@ const FAQ = ({ classes }) => {
     {
       q: "I am not from India. Can I participate?",
       a:
-        "Indeed. We are surviving a global pandemic and we encourage global participation. Having said that we accept payment only through Google Pay and Paytm. If you can arrange payment through these services and upload a successful screenshot, then nothing else is stopping you."
+        "Indeed. We are surviving a global pandemic and we encourage global participation. Having said that we accept payment only through Google Pay and Paytm. If you can arrange payment through these services and upload a successful screenshot, then nothing else is stopping you.",
     },
     {
       q: "Is there a registration fee?",
       a:
-        "The registration fees for each team is Rs. 199 for each team participating."
+        "The registration fees for each team is Rs. 199 for each team participating.",
     },
     {
       q: "Are Special Effects allowed?",
       a:
-        "Yes, you can include special effects. However, no stock footage may be used for this. "
+        "Yes, you can include special effects. However, no stock footage may be used for this. ",
     },
     {
       q: "What will be the duration of the films?",
       a:
-        "The films are to be made no longer than 10 minutes. This is because, for a good film produced in this challenge, 4 to 6 minutes is an ideal duration."
+        "The films are to be made no longer than 10 minutes. This is because, for a good film produced in this challenge, 4 to 6 minutes is an ideal duration.",
     },
     {
       q: "Does the maximum length of the film include end credits?",
       a:
-        "Yes, the end credits and opening slide are included in the duration of your film. "
+        "Yes, the end credits and opening slide are included in the duration of your film. ",
     },
     {
       q: "Can I modify the film after the deadline?",
       a:
-        "Of course, you can modify the film post the deadline. It is your film!"
+        "Of course, you can modify the film post the deadline. It is your film!",
     },
     {
       q: "How do I upload my film faster?",
       a:
-        "We would recommend you to render the film at 720p for faster upload results. Also, keeping the file size below 1 GB would make it faster. Third party compression tools like handbrake and such can help compress your videos but use them at your own discretion."
+        "We would recommend you to render the film at 720p for faster upload results. Also, keeping the file size below 1 GB would make it faster. Third party compression tools like handbrake and such can help compress your videos but use them at your own discretion.",
     },
     {
       q: "Can I send in multiple entries?",
-      a: "Yes, you just need to pay the entry fee for each."
+      a: "Yes, you just need to pay the entry fee for each.",
     },
     {
       q: "What are the films about?",
       a:
-        "We are dealing with a lockdown and dealing with a global pandemic. The films can be about the current situation, or even act as a distraction from the same. Each team selects its Genre separately. However, creatively there are no limitations on the filmmaker, but competitional – constraints."
+        "We are dealing with a lockdown and dealing with a global pandemic. The films can be about the current situation, or even act as a distraction from the same. Each team selects its Genre separately. However, creatively there are no limitations on the filmmaker, but competitional – constraints.",
     },
     {
       q: "Who watches these films?",
       a:
-        "The films made at this festival are screened publicly on the internet. The audience consists of Film buffs, participating teams and their family and friends. These films are also showcased on our website and YouTube channel. Filmmakers can also share these films across their circle."
+        "The films made at this festival are screened publicly on the internet. The audience consists of Film buffs, participating teams and their family and friends. These films are also showcased on our website and YouTube channel. Filmmakers can also share these films across their circle.",
     },
     {
       q: "What can be the team size?",
       a:
-        "The team can have a minimum of 1 person and a maximum of a city. Each team member receives an e-certificate from SHARP_NERD."
+        "The team can have a minimum of 1 person and a maximum of a city. Each team member receives an e-certificate from SHARP_NERD.",
     },
     {
       q: "Can I sponsor this challenge?",
-      a: "Please mail us at productions.sharp.nerd@gmail.com "
+      a: "Please mail us at productions.sharp.nerd@gmail.com ",
     },
     { q: "Is any footage allowed in the end credits?", a: "Yes. " },
     {
       q: "Can I use a stock photo?",
-      a: "If you own the rights to the photo, you can use it."
+      a: "If you own the rights to the photo, you can use it.",
     },
     {
       q: "Is animation allowed?",
-      a: "Yes, if you wish to make an animated film, go for it!"
+      a: "Yes, if you wish to make an animated film, go for it!",
     },
     {
       q: "Can we include a title animation or our company logo in the film?",
       a:
-        "Yes, you can. Provided they are only on screen for less than 10 seconds."
+        "Yes, you can. Provided they are only on screen for less than 10 seconds.",
     },
     {
       q:
         "What should be the shooting quality, aspect ratio and sound for the film?",
       a:
-        "The final output should be a MPEG4 file with a resolution of 720p or 1080p (please limit the resolution to these two). The aspect ratio should be 16:9. The sound has to be stereo."
+        "The final output should be a MPEG4 file with a resolution of 720p or 1080p (please limit the resolution to these two). The aspect ratio should be 16:9. The sound has to be stereo.",
     },
     {
       q: "What language must my film be in? Do I need to add subtitles?",
       a:
-        "Your film can be in any language. Subtitles are compulsory for all films. You can refer to rules for more specific details about subtitles."
+        "Your film can be in any language. Subtitles are compulsory for all films. You can refer to rules for more specific details about subtitles.",
     },
     {
       q: "I can’t find a team member. Can SHARP_NERD help?",
       a:
-        "No. The idea is to engage yourself at home while maintaining social-distancing."
+        "No. The idea is to engage yourself at home while maintaining social-distancing.",
     },
     {
       q:
         "I am a filmmaker participating with a mobile phone. Can I edit my film on mobile itself?",
-      a: "Sure. It is your film. But maintain the aspect ratio."
+      a: "Sure. It is your film. But maintain the aspect ratio.",
     },
     {
       q: "Do I need a 'Location Release' to shoot on public property?",
       a:
-        "No, you need a location release only on a privately held property. But we strongly recommend taking permits wherever necessary in the case of public property."
+        "No, you need a location release only on a privately held property. But we strongly recommend taking permits wherever necessary in the case of public property.",
     },
     {
       q: "Where do I upload the film?",
-      a: "Refer our website. Also go through the How to Submit section."
+      a: "Refer our website. Also go through the How to Submit section.",
     },
     {
       q: "Can I use mobile to upload my film?",
       a:
-        "We highly advise you to use a laptop to upload your film. Mobile connections tend to be inconsistent, leading to delays. Use of a high-speed broadband is definitely a plus!"
+        "We highly advise you to use a laptop to upload your film. Mobile connections tend to be inconsistent, leading to delays. Use of a high-speed broadband is definitely a plus!",
     },
     {
       q: "How do you judge so many films?",
       a:
-        "Each film, according to its category of participation, is sent to three different pre-juries for evaluation, consisting of our team members. The cumulative score from the pre-juries is used to prepare a list of merit. The top films from each category are sent to the final jury for viewing and ranking."
+        "Each film, according to its category of participation, is sent to three different pre-juries for evaluation, consisting of our team members. The cumulative score from the pre-juries is used to prepare a list of merit. The top films from each category are sent to the final jury for viewing and ranking.",
     },
     {
       q: "Is the judging process transparent?",
       a:
-        "With our target to involve and engage everyone during this tough time we strive hard to make sure that justice is done to each and every film submitted. We shall make it our best attempt to coordinate with everyone while working remotely. To make sure we do not miss out on any films, the team will also watch these films simultaneously and raises an issue internally if any flaws or biases are found in the process. We do not entertain any requests for paid awards, neither have in the past and nor will in the future, to keep the spirit of competition alive."
-    }
+        "With our target to involve and engage everyone during this tough time we strive hard to make sure that justice is done to each and every film submitted. We shall make it our best attempt to coordinate with everyone while working remotely. To make sure we do not miss out on any films, the team will also watch these films simultaneously and raises an issue internally if any flaws or biases are found in the process. We do not entertain any requests for paid awards, neither have in the past and nor will in the future, to keep the spirit of competition alive.",
+    },
   ];
 
   return (

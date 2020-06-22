@@ -8,10 +8,11 @@ const firebaseConfig = {
   storageBucket: "filmfest-8db31.appspot.com",
   messagingSenderId: "189062247858",
   appId: "1:189062247858:web:6df2dd02e98799701060ab",
-  measurementId: "G-YJ493HSJZQ",
+  measurementId: "G-YJ493HSJZQ"
 };
 
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 var store = firebase.storage();
-export { db, store };
+var analytics = firebase.analytics();
+export { db, store, analytics };

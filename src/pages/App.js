@@ -14,6 +14,7 @@ import rootReducer from "../components/redux";
 
 const theme = createMuiTheme({
   palette: {
+    type: "dark",
     primary: amber,
     secondary: indigo,
     danger: {
@@ -23,7 +24,7 @@ const theme = createMuiTheme({
       contrastText: "#fff"
     },
     common: {
-      sectionBackground: "#25211f",
+      sectionBackground: "#091213",
       textColor: "#fff"
     }
   }
@@ -40,7 +41,7 @@ function App() {
   );
 
   return (
-    <div className="App" style={{ backgroundColor: "#25211f" }}>
+    <div className="App" style={{ backgroundColor: "#091213" }}>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <BrowserRouter>

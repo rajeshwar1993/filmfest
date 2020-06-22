@@ -29,14 +29,14 @@ const useStyles = makeStyles(theme => ({
   imageSection: {
     height: "100vh",
     backgroundImage:
-      "url(https://fivedayfilm.com/wp-content/uploads/2018/07/Camera-Equipment-For-2018.jpg)",
+      "url(https://images.pexels.com/photos/3379942/pexels-photo-3379942.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260)",
     backgroundSize: "cover",
     backgroundPosition: "center"
   },
   titleBox: {
     height: "100%",
     width: "100%",
-    backgroundColor: "#191919de",
+    backgroundImage: `linear-gradient(transparent 20%, #091213fc 100%)`,
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
@@ -65,6 +65,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.common.textColor
   },
   partner: {
+    display: "none",
     textAlign: "center",
     "& .MuiBox-root": {
       display: "flex",
@@ -298,7 +299,12 @@ const Home = ({ data }) => {
             <FacebookIcon fontSize="large" />
           </IconButton>
 
-          <IconButton aria-label="Instagram" style={{ color: "white" }}>
+          <IconButton
+            href="https://www.instagram.com/tales_in_10/"
+            target="_blank"
+            aria-label="Instagram"
+            style={{ color: "white" }}
+          >
             <InstagramIcon fontSize="large" />
           </IconButton>
 
@@ -321,7 +327,23 @@ const Home = ({ data }) => {
           </IconButton>
         </Box>
       </Grid>
-      <Grid item xs={12} className={classes.aboutUs}>
+      <Grid id={"contact"} item xs={12} className={classes.contactUs}>
+        <Typography variant="h6" component="h3">
+          Contact
+        </Typography>
+        <Box>
+          <Button
+            href="mailto:productions.sharp.nerd@gmail.com"
+            aria-label="Email contact"
+            style={{ color: "white" }}
+            startIcon={<EmailIcon />}
+            fullWidth
+          >
+            productions.sharp.nerd@gmail.com
+          </Button>
+        </Box>
+      </Grid>
+      <Grid id={"about"} item xs={12} className={classes.aboutUs}>
         <Box>
           <Typography variant="h4" component="h3">
             {data.fest_name}
@@ -362,26 +384,24 @@ const Home = ({ data }) => {
             Festival Dates
           </Typography>
           <Typography variant="subtitle1" component="span">
-            <ol>
+            The timeline is as follows:
+            <ul>
               <li>
-                The timeline is as follows:
-                <ul>
-                  <li>
-                    Commencement - <strong>01 July 2020</strong> (National
-                    Doctor's Day)
-                  </li>
-                  <li>
-                    Last day for film submission - <strong>19 July 2020</strong>
-                  </li>
-                  <li>
-                    Film Screening - <strong>TBA</strong>
-                  </li>
-                  <li>
-                    Prize Distribution - <strong>15 August 2020</strong>
-                  </li>
-                </ul>
+                Submisssions begin -{" "}
+                <strong>10:00am (IST), 15 July 2020</strong>
               </li>
-            </ol>
+              <li>
+                Last day for film submission -{" "}
+                <strong>11:59pm (IST), 02 August 2020</strong>
+              </li>
+              <li>
+                Film Screening - <strong>15 and 16 of August, 2020</strong> -
+                (Time TBA)
+              </li>
+              <li>
+                Prize Distribution - <strong>30 August, 2020</strong>
+              </li>
+            </ul>
           </Typography>
         </Box>
       </Grid>
@@ -390,31 +410,6 @@ const Home = ({ data }) => {
       </Grid>
       <Grid id={"faq"} item xs={12} className={classes.dataBoxes}>
         <FAQ classes={classes} />
-      </Grid>
-      <Grid id={"contact"} item xs={12} className={classes.contactUs}>
-        <Typography variant="h6" component="h3">
-          Contact
-        </Typography>
-        <Box>
-          <Button
-            href="mailto:productions.sharp.nerd@gmail.com"
-            aria-label="Email contact"
-            style={{ color: "white" }}
-            startIcon={<EmailIcon />}
-            fullWidth
-          >
-            productions.sharp.nerd@gmail.com
-          </Button>
-
-          <Button
-            href="tel:+91999999999"
-            aria-label="Instagram"
-            style={{ color: "white" }}
-            startIcon={<PhoneIcon />}
-          >
-            +91999999999
-          </Button>
-        </Box>
       </Grid>
     </Grid>
   );
@@ -435,12 +430,42 @@ const Rules = () => {
             <strong>10 minutes</strong> including opening and end credits.
           </li>
           <li>
-            The opening and closing slides provided are to be accommodated in
+            The opening slide provided will <strong>NOT</strong> be counted in
             the total duration of the film.
+            <ul>
+              <li>
+                The opening slide will be provided by 14 July, 2020 which is
+                mandatory to be used at the very begining of the film.
+              </li>
+              <li>
+                The slide will be provided as a downloadable link in the{" "}
+                <Link
+                  href="/rules"
+                  color="secondary"
+                  style={{ textDecoration: "underline" }}
+                >
+                  Rules
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/submit#howto"
+                  color="secondary"
+                  style={{ textDecoration: "underline" }}
+                >
+                  How to Submit
+                </Link>{" "}
+                section.
+              </li>
+            </ul>
           </li>
           <li>
-            You may use any device o record, Mobile phone, DSLR, Action camera
-            (Go Pro or Equivalent), Drone* 1 , or even films.
+            You may use any device to record, Mobile phone, DSLR, Action camera
+            (Go Pro or Equivalent), Drone , or even films.
+          </li>
+          <li>
+            You may submit films previously made by you/your team which follow
+            the given guidelines. The opening slide needs to be included in
+            these submissions as well.
           </li>
           <li>
             You may use upload the film in one of the following ways:
@@ -453,26 +478,15 @@ const Rules = () => {
           </li>
           <li>Use original or royalty free music.</li>
           <li>
-            Make Payment of{" "}
-            <strong>Rs. 149 (4 EUR for international entry)</strong> in one of
-            the following ways and take a screenshot of the successful payment
-            screen
+            Make Payment of <strong>Rs. 199 </strong> in one of the following
+            ways and take a screenshot of the success payment screen (this needs
+            to be uploaded with submission):
             <ul>
               <li>
-                Indian Entry <strong>(Rs. 149)</strong>
-                <ul>
-                  <li>
-                    Google Pay (number) - <strong>Recommended</strong>
-                  </li>
-                  <li>Paytm (number)</li>
-                </ul>
+                Google Pay - <strong>Recommended</strong>
               </li>
-              <li>
-                International Entry <strong>(4 EUR)</strong>
-                <ul>
-                  <li>Payment Method</li>
-                </ul>
-              </li>
+              <li>Paytm </li>
+              <li>(payment numbers will be provided here by 14 July, 2020)</li>
             </ul>
           </li>
           <li>
@@ -515,14 +529,18 @@ const Rules = () => {
             content.
           </li>
           <li>
-            The window for submitting your entries closes at 11:59pm (IST) on
-            19th July, 2020.
+            The window for submitting your entries opens at 10:00am (IST) on 15
+            July, 2020 and closes at 11:59pm (IST) on 02 August, 2020.
           </li>
           <li>
-            We are all dealing with tough tums and working from home. Please be
+            We are all dealing with tough times and working from home. Please be
             considerate about the size of your submission with respect to the
             internet bandwidth. You may have to send just one, but we need to
             download them all.
+          </li>
+          <li>
+            Please refrain from making any caustic political, communal or
+            religious statements in the film that may offend sensitivity.
           </li>
           <li>
             Please check{" "}
@@ -554,12 +572,12 @@ const FAQ = ({ classes }) => {
     {
       q: "I am not from India. Can I participate?",
       a:
-        "Indeed. We are surviving a global pandemic and we encourage global participation."
+        "Indeed. We are surviving a global pandemic and we encourage global participation. Having said that we accept payment only through Google Pay and Paytm. If you can arrange payment through these services and upload a successful screenshot, then nothing else is stopping you."
     },
     {
       q: "Is there a registration fee?",
       a:
-        "The registration fees for each team is Rs. 200 for each team participating from within the national territory of India and €5 for each team participating from beyond the international borders."
+        "The registration fees for each team is Rs. 199 for each team participating."
     },
     {
       q: "Are Special Effects allowed?",
@@ -573,7 +591,8 @@ const FAQ = ({ classes }) => {
     },
     {
       q: "Does the maximum length of the film include end credits?",
-      a: "Yes, the end credits are included in the duration of your film. "
+      a:
+        "Yes, the end credits and opening slide are included in the duration of your film. "
     },
     {
       q: "Can I modify the film after the deadline?",
@@ -606,7 +625,7 @@ const FAQ = ({ classes }) => {
     },
     {
       q: "Can I sponsor this challenge?",
-      a: "Please mail us at sharp_nerd@gmail.com "
+      a: "Please mail us at productions.sharp.nerd@gmail.com "
     },
     { q: "Is any footage allowed in the end credits?", a: "Yes. " },
     {
@@ -626,17 +645,12 @@ const FAQ = ({ classes }) => {
       q:
         "What should be the shooting quality, aspect ratio and sound for the film?",
       a:
-        "The final output should be a MPEG4 file with a resolution of 720p. The aspect ratio should be 16:9. The sound has to be stereo."
+        "The final output should be a MPEG4 file with a resolution of 720p or 1080p (please limit the resolution to these two). The aspect ratio should be 16:9. The sound has to be stereo."
     },
     {
       q: "What language must my film be in? Do I need to add subtitles?",
       a:
         "Your film can be in any language. Subtitles are compulsory for all films. You can refer to rules for more specific details about subtitles."
-    },
-    {
-      q:
-        "I am a participant from out of India. What standard time should we follow for the 50 Hours?",
-      a: "The standard time for the challenge will be Indian Standard Time."
     },
     {
       q: "I can’t find a team member. Can SHARP_NERD help?",
@@ -655,7 +669,7 @@ const FAQ = ({ classes }) => {
     },
     {
       q: "Where do I upload the film?",
-      a: "Refer our website. A link will be made available there."
+      a: "Refer our website. Also go through the How to Submit section."
     },
     {
       q: "Can I use mobile to upload my film?",

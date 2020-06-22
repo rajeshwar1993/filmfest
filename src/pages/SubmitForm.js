@@ -21,7 +21,9 @@ import {
   DialogContent,
   CircularProgress,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Paper,
+  Hidden
 } from "@material-ui/core";
 
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -32,6 +34,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: theme.spacing(8)
   },
+  paper: { backgroundColor: theme.palette.common.sectionBackground },
   rules: {
     padding: theme.spacing(2),
     color: theme.palette.common.white,
@@ -47,14 +50,14 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     padding: theme.spacing(2, 0),
-    backgroundColor: theme.palette.common.sectionBackground,
-    color: theme.palette.primary.main,
+    //backgroundColor: theme.palette.common.sectionBackground,
+    //color: theme.palette.primary.main,
     [theme.breakpoints.up("md")]: {
       padding: theme.spacing(4)
     }
   },
   submitWrapper: {
-    backgroundColor: "#f5f5f5",
+    //backgroundColor: "#f5f5f5",
     height: "calc(100% - 32px)",
     padding: theme.spacing(2),
     borderRadius: theme.spacing(1)
@@ -202,409 +205,535 @@ const SubmitForm = () => {
 
   return (
     <Container maxWidth={"md"} className={classes.root}>
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby="simple-dialog-title"
-        open={dialogIsOpen}
-        maxWidth={"lg"}
-        className={classes.imageDialog}
-      >
-        <DialogTitle id="title">{"Submission Status"}</DialogTitle>
-        <DialogContent>
-          {isLoading && <CircularProgress />}
-          {!isLoading && !dialogObj.error && (
-            <Typography
-              variant="h5"
-              component="h5"
-              style={{ color: "#07a465" }}
+      <Paper className={classes.paper}>
+        <Dialog
+          onClose={handleClose}
+          aria-labelledby="simple-dialog-title"
+          open={dialogIsOpen}
+          maxWidth={"lg"}
+          className={classes.imageDialog}
+        >
+          <DialogTitle id="title">{"Submission Status"}</DialogTitle>
+          <DialogContent>
+            {isLoading && <CircularProgress />}
+            {!isLoading && !dialogObj.error && (
+              <Typography
+                variant="h5"
+                component="h5"
+                style={{ color: "#07a465" }}
+              >
+                Submission Successful!!
+              </Typography>
+            )}
+            {!isLoading && dialogObj.error && (
+              <>
+                <Typography
+                  variant="h5"
+                  component="h5"
+                  style={{ color: "red" }}
+                >
+                  Submission Unuccessful!!
+                </Typography>
+                <Typography variant="h6" component="h6">
+                  {dialogObj.message}
+                </Typography>
+              </>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleClose}
+              color="primary"
+              variant="contained"
+              disabled={isLoading}
             >
-              Submission Successful!!
-            </Typography>
-          )}
-          {!isLoading && dialogObj.error && (
-            <>
-              <Typography variant="h5" component="h5" style={{ color: "red" }}>
-                Submission Unuccessful!!
-              </Typography>
-              <Typography variant="h6" component="h6">
-                {dialogObj.message}
-              </Typography>
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleClose}
-            color="primary"
-            variant="contained"
-            disabled={isLoading}
-          >
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Grid item xs={12} className={classes.submit}>
-        <Box className={classes.submitWrapper}>
-          <Box>
-            <form onSubmit={handleSubmit(uploadInfo)}>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  <Typography
-                    variant="h5"
-                    component="h5"
-                    style={{ color: "#000" }}
-                  >
-                    Submit Film:
-                  </Typography>
-                  <Typography variant="body2" style={{ color: "#000" }}>
-                    Please read the{" "}
-                    <Link
-                      href="#howto"
-                      color="secondary"
-                      style={{ textDecoration: "underline" }}
-                    >
-                      How To Submit
-                    </Link>{" "}
-                    section before submitting.
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    fullWidth
-                    name={"team_name"}
-                    variant="standard"
-                    label={"Team Name *"}
-                    inputRef={register({ required: true })}
-                    error={!!errors.team_name}
-                    helperText={!!errors.team_name && "This info is required."}
-                  />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    fullWidth
-                    name={"leader_name"}
-                    variant="standard"
-                    label={"Team Leader Name *"}
-                    inputRef={register({ required: true })}
-                    error={!!errors.leader_name}
-                    helperText={
-                      !!errors.leader_name && "This info is required."
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    fullWidth
-                    type="email"
-                    name={"email"}
-                    variant="standard"
-                    label={"Team Leader Email *"}
-                    inputRef={register({ required: true })}
-                    error={!!errors.email}
-                    helperText={!!errors.email && "This info is required."}
-                  />
-                </Grid>
-
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    name={"phone"}
-                    variant="standard"
-                    label={"Team Leader Phone Number *"}
-                    inputRef={register({ required: true })}
-                    error={!!errors.phone}
-                    helperText={!!errors.phone && "This info is required."}
-                  />
-                </Grid>
-                <Grid item xs={false} md={4} />
-                <Grid item xs={false} md={4} />
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    fullWidth
-                    name={"film_title"}
-                    variant="standard"
-                    label={"Film Title *"}
-                    inputRef={register({ required: true })}
-                    error={!!errors.film_title}
-                    helperText={!!errors.film_title && "This info is required."}
-                  />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <Controller
-                    name={"genre"}
-                    control={control}
-                    rules={{ required: true }}
-                    as={
-                      <TextField select label={"Film Genre *"} fullWidth>
-                        <MenuItem value={"Drama"}>Drama</MenuItem>
-                        <MenuItem value={"Comedy"}>Comedy</MenuItem>
-                        <MenuItem value={"Horror"}>Horror</MenuItem>
-                        <MenuItem value={"Action"}>Action</MenuItem>
-                        <MenuItem value={"Musical/Dance"}>
-                          Musical/Dance
-                        </MenuItem>
-                        <MenuItem value={"Adventure"}>Adventure</MenuItem>
-                        <MenuItem value={"Other"}>Other</MenuItem>
-                      </TextField>
-                    }
-                  />
-                  <FormHelperText>
-                    {!!errors.genre && "This info is required."}
-                  </FormHelperText>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    fullWidth
-                    name={"rt"}
-                    variant="standard"
-                    label={"Run Time *"}
-                    placeholder={"mm:ss"}
-                    inputRef={register({ required: true })}
-                    error={!!errors.rt}
-                    helperText={!!errors.rt && "This info is required."}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    name={"synop"}
-                    variant="outlined"
-                    label={"Film Synopsys *"}
-                    placeholder={"Film Synopsys in about 200 words..."}
-                    multiline
-                    rows={5}
-                    fullWidth
-                    inputRef={register({ required: true })}
-                    error={!!errors.synop}
-                    helperText={!!errors.synop && "This info is required."}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    name={"md"}
-                    variant="outlined"
-                    label={"Music Used"}
-                    placeholder={"Mention any music that was used in the film."}
-                    multiline
-                    rows={5}
-                    fullWidth
-                    inputRef={register}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    type="url"
-                    name={"link"}
-                    variant="standard"
-                    label={"Film Link *"}
-                    placeholder={
-                      "Google Drive / Youtube Private / Vemo Private link"
-                    }
-                    fullWidth
-                    inputRef={register({ required: true })}
-                    error={!!errors.link}
-                    helperText={!!errors.link && "This info is required."}
-                  />
-                </Grid>
-                <Grid item xs={8} md={6}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="secondary"
-                    component="label"
-                  >
-                    Upload Payment Screenshot
-                    <input
-                      type="file"
-                      accept="image/*"
-                      style={{ display: "none" }}
-                      name={"paypic"}
-                      ref={register({
-                        required: {
-                          value: true,
-                          message:
-                            "Please upload payment screenshot of Rs 149 by Google Pay / PayTm."
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Hidden xsUp>
+          <Grid item xs={12} className={classes.submit}>
+            <Box className={classes.submitWrapper}>
+              <Box>
+                <form onSubmit={handleSubmit(uploadInfo)}>
+                  <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                      <Typography variant="h5" component="h5">
+                        Submit Film:
+                      </Typography>
+                      <Typography variant="body2">
+                        Please read the{" "}
+                        <Link
+                          href="#howto"
+                          color="secondary"
+                          style={{ textDecoration: "underline" }}
+                        >
+                          How To Submit
+                        </Link>{" "}
+                        section before submitting.
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        name={"team_name"}
+                        variant="standard"
+                        label={"Team Name *"}
+                        inputRef={register({ required: true })}
+                        error={!!errors.team_name}
+                        helperText={
+                          !!errors.team_name && "This info is required."
                         }
-                      })}
-                      onChange={e => {
-                        if (e.nativeEvent.target.files.length > 0)
-                          toggleIsPayPic(true);
-                      }}
-                    />
-                  </Button>
-                  {!errors.paypic && (
-                    <FormHelperText>
-                      Please upload payment screenshot of Rs 149 by Google Pay /
-                      PayTm.
-                    </FormHelperText>
-                  )}
-                  {!!errors.paypic && (
-                    <FormHelperText className={classes.errorText}>
-                      {errors.paypic.message}
-                    </FormHelperText>
-                  )}
-                </Grid>
-                <Grid item xs={4} md={6}>
-                  {isPayPic && (
-                    <CheckCircleIcon
-                      style={{ fontSize: 40, color: "#07a465" }}
-                    />
-                  )}
-                </Grid>
-                <Grid container item xs={12}>
-                  <Grid item xs={12}>
-                    <Typography
-                      variant="h6"
-                      component="span"
-                      style={{ color: "#000" }}
-                    >
-                      Team Details:
-                    </Typography>
-                  </Grid>
-                  {fields.map((item, index) => (
-                    <Grid
-                      container
-                      key={item.id}
-                      spacing={2}
-                      className={classes.teamPersonGrid}
-                    >
-                      <Grid item xs={12} md={4}>
-                        <TextField
-                          type={"text"}
-                          label={"Team Member Name *"}
-                          placeholder={"Team Member Name"}
-                          name={`team[${index}].nm`}
-                          inputRef={register({ required: true })}
-                          error={!!errors[`team[${index}].nm`]}
-                          helperText={
-                            !!errors[`team[${index}].nm`] &&
-                            "This info is required."
-                          }
-                          fullWidth
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                {index + 1}.
-                              </InputAdornment>
-                            )
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        name={"leader_name"}
+                        variant="standard"
+                        label={"Team Leader Name *"}
+                        inputRef={register({ required: true })}
+                        error={!!errors.leader_name}
+                        helperText={
+                          !!errors.leader_name && "This info is required."
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        type="email"
+                        name={"email"}
+                        variant="standard"
+                        label={"Team Leader Email *"}
+                        inputRef={register({ required: true })}
+                        error={!!errors.email}
+                        helperText={!!errors.email && "This info is required."}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        type="number"
+                        name={"phone"}
+                        variant="standard"
+                        label={"Team Leader Phone Number *"}
+                        inputRef={register({ required: true })}
+                        error={!!errors.phone}
+                        helperText={!!errors.phone && "This info is required."}
+                      />
+                    </Grid>
+                    <Grid item xs={false} md={4} />
+                    <Grid item xs={false} md={4} />
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        name={"film_title"}
+                        variant="standard"
+                        label={"Film Title *"}
+                        inputRef={register({ required: true })}
+                        error={!!errors.film_title}
+                        helperText={
+                          !!errors.film_title && "This info is required."
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <Controller
+                        name={"genre"}
+                        control={control}
+                        rules={{ required: true }}
+                        as={
+                          <TextField select label={"Film Genre *"} fullWidth>
+                            <MenuItem value={"Drama"}>Drama</MenuItem>
+                            <MenuItem value={"Comedy"}>Comedy</MenuItem>
+                            <MenuItem value={"Horror"}>Horror</MenuItem>
+                            <MenuItem value={"Action"}>Action</MenuItem>
+                            <MenuItem value={"Musical/Dance"}>
+                              Musical/Dance
+                            </MenuItem>
+                            <MenuItem value={"Adventure"}>Adventure</MenuItem>
+                            <MenuItem value={"Other"}>Other</MenuItem>
+                          </TextField>
+                        }
+                      />
+                      <FormHelperText>
+                        {!!errors.genre && "This info is required."}
+                      </FormHelperText>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        name={"rt"}
+                        variant="standard"
+                        label={"Run Time *"}
+                        placeholder={"mm:ss"}
+                        inputRef={register({ required: true })}
+                        error={!!errors.rt}
+                        helperText={!!errors.rt && "This info is required."}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        name={"synop"}
+                        variant="outlined"
+                        label={"Film Synopsys *"}
+                        placeholder={"Film Synopsys in about 200 words..."}
+                        multiline
+                        rows={5}
+                        fullWidth
+                        inputRef={register({ required: true })}
+                        error={!!errors.synop}
+                        helperText={!!errors.synop && "This info is required."}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        name={"md"}
+                        variant="outlined"
+                        label={"Music Used"}
+                        placeholder={
+                          "Mention any music that was used in the film."
+                        }
+                        multiline
+                        rows={5}
+                        fullWidth
+                        inputRef={register}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        type="url"
+                        name={"link"}
+                        variant="standard"
+                        label={"Film Link *"}
+                        placeholder={
+                          "Google Drive / Youtube Private / Vemo Private link"
+                        }
+                        fullWidth
+                        inputRef={register({ required: true })}
+                        error={!!errors.link}
+                        helperText={!!errors.link && "This info is required."}
+                      />
+                    </Grid>
+                    <Grid item xs={8} md={6}>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        component="label"
+                      >
+                        Upload Payment Screenshot
+                        <input
+                          type="file"
+                          accept="image/*"
+                          style={{ display: "none" }}
+                          name={"paypic"}
+                          ref={register({
+                            required: {
+                              value: true,
+                              message:
+                                "Please upload payment screenshot of Rs 149 by Google Pay / PayTm."
+                            }
+                          })}
+                          onChange={e => {
+                            if (e.nativeEvent.target.files.length > 0)
+                              toggleIsPayPic(true);
                           }}
                         />
-                      </Grid>
-                      <Grid item xs={12} md={3}>
-                        <TextField
-                          type={"email"}
-                          label={"Team Member E-mail *"}
-                          name={`team[${index}].em`}
-                          inputRef={register({ required: true })}
-                          error={!!errors[`team[${index}].em`]}
-                          helperText={
-                            !!errors[`team[${index}].em`] &&
-                            "This info is required."
-                          }
-                          fullWidth
+                      </Button>
+                      {!errors.paypic && (
+                        <FormHelperText>
+                          Please upload payment screenshot of Rs 149 by Google
+                          Pay / PayTm.
+                        </FormHelperText>
+                      )}
+                      {!!errors.paypic && (
+                        <FormHelperText className={classes.errorText}>
+                          {errors.paypic.message}
+                        </FormHelperText>
+                      )}
+                    </Grid>
+                    <Grid item xs={4} md={6}>
+                      {isPayPic && (
+                        <CheckCircleIcon
+                          style={{ fontSize: 40, color: "#07a465" }}
                         />
+                      )}
+                    </Grid>
+                    <Grid container item xs={12}>
+                      <Grid item xs={12}>
+                        <Typography variant="h6" component="span">
+                          Team Details:
+                        </Typography>
                       </Grid>
-                      <Grid item xs={12} md={3}>
-                        <TextField
-                          type={"text"}
-                          label={"Team Member Role *"}
-                          placeholder={"eg: Director, Actor etc"}
-                          name={`team[${index}].role`}
-                          inputRef={register({ required: true })}
-                          error={!!errors[`team[${index}].role`]}
-                          helperText={
-                            !!errors[`team[${index}].role`] &&
-                            "This info is required."
-                          }
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={2}>
-                        <Button
-                          color="danger"
-                          variant="outlined"
-                          onClick={() => remove(index)}
-                          startIcon={<DeleteIcon />}
+                      {fields.map((item, index) => (
+                        <Grid
+                          container
+                          key={item.id}
+                          spacing={2}
+                          className={classes.teamPersonGrid}
                         >
-                          Remove
+                          <Grid item xs={12} md={4}>
+                            <TextField
+                              type={"text"}
+                              label={"Team Member Name *"}
+                              placeholder={"Team Member Name"}
+                              name={`team[${index}].nm`}
+                              inputRef={register({ required: true })}
+                              error={!!errors[`team[${index}].nm`]}
+                              helperText={
+                                !!errors[`team[${index}].nm`] &&
+                                "This info is required."
+                              }
+                              fullWidth
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    {index + 1}.
+                                  </InputAdornment>
+                                )
+                              }}
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={3}>
+                            <TextField
+                              type={"email"}
+                              label={"Team Member E-mail *"}
+                              name={`team[${index}].em`}
+                              inputRef={register({ required: true })}
+                              error={!!errors[`team[${index}].em`]}
+                              helperText={
+                                !!errors[`team[${index}].em`] &&
+                                "This info is required."
+                              }
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={3}>
+                            <TextField
+                              type={"text"}
+                              label={"Team Member Role *"}
+                              placeholder={"eg: Director, Actor etc"}
+                              name={`team[${index}].role`}
+                              inputRef={register({ required: true })}
+                              error={!!errors[`team[${index}].role`]}
+                              helperText={
+                                !!errors[`team[${index}].role`] &&
+                                "This info is required."
+                              }
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={2}>
+                            <Button
+                              color="danger"
+                              variant="outlined"
+                              onClick={() => remove(index)}
+                              startIcon={<DeleteIcon />}
+                            >
+                              Remove
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      ))}
+                      <Grid item xs={12} lg={4}>
+                        <Button
+                          color="secondary"
+                          variant="contained"
+                          onClick={() => append({ name: "exp" })}
+                          startIcon={<AddIcon />}
+                        >
+                          Add Team Member
                         </Button>
                       </Grid>
                     </Grid>
-                  ))}
-                  <Grid item xs={12} lg={4}>
-                    <Button
-                      color="secondary"
-                      variant="contained"
-                      onClick={() => append({ name: "exp" })}
-                      startIcon={<AddIcon />}
-                    >
-                      Add Team Member
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={readRules}
-                        onChange={() => {
-                          toggleReadRules(!readRules);
-                        }}
+                    <Grid item xs={12}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={readRules}
+                            onChange={() => {
+                              toggleReadRules(!readRules);
+                            }}
+                          />
+                        }
+                        label={
+                          <Typography variant="body2" style={{ color: "#000" }}>
+                            I have read and followed all the competition{" "}
+                            <Link href="/#rules" color="secondary">
+                              Rules
+                            </Link>
+                            . I have also followed all the steps mentioned in
+                            the{" "}
+                            <Link color="secondary" href="#howto">
+                              How to Submit
+                            </Link>{" "}
+                            Section.
+                          </Typography>
+                        }
                       />
-                    }
-                    label={
-                      <Typography variant="body2" style={{ color: "#000" }}>
-                        I have read and followed all the competition{" "}
-                        <Link href="/#rules" color="secondary">
-                          Rules
-                        </Link>
-                        . I have also followed all the steps mentioned in the{" "}
-                        <Link color="secondary" href="#howto">
-                          How to Submit
-                        </Link>{" "}
-                        Section.
-                      </Typography>
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    disabled={!readRules}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        disabled={!readRules}
+                      >
+                        Submit
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </form>
+              </Box>
+            </Box>
+          </Grid>
+        </Hidden>
+        <Grid item xs={12} className={classes.submit}>
+          <Typography variant="h3">
+            Submission form will be active here at 10:00am (IST) 15 July, 2020
+          </Typography>
+        </Grid>
+        <Grid id={"howto"} item xs={12} className={classes.rules}>
+          <Box className={classes.rulesWrapper}>
+            <Typography
+              variant="h4"
+              component="h4"
+              style={{ textAlign: "center" }}
+            >
+              How to submit
+            </Typography>
+            <Typography
+              variant="h6"
+              component="h6"
+              style={{ textAlign: "center" }}
+            >
+              Please use the following guidelines to create and submit your
+              film.
+            </Typography>
+            <Typography variant="subtitle1" component="span">
+              <ol>
+                <li>
+                  Please edit your film accrding to the following guidelines:
+                  <ul>
+                    <li>
+                      Maintain the overall runtime of the film to under or upto
+                      10 mins (excluding opening slide).
+                    </li>
+                    <li>
+                      Include the given opening slide of the film at the very
+                      begining. The 10 mins maximum runtime will{" "}
+                      <strong>NOT</strong> include the opening slide duration.
+                      The slide will be provided as a downloadable link in the{" "}
+                      <Link
+                        href="/rules"
+                        color="secondary"
+                        style={{ textDecoration: "underline" }}
+                      >
+                        Rules
+                      </Link>{" "}
+                      and{" "}
+                      <Link
+                        href="/submit#howto"
+                        color="secondary"
+                        style={{ textDecoration: "underline" }}
+                      >
+                        How to Submit
+                      </Link>{" "}
+                      section by 14 July, 2020.
+                    </li>
+                    <li>
+                      Please render your films at a resolution of either 720p or
+                      1080p. Please try and restrict the total size upto a
+                      maximum of 1Gb per film.
+                    </li>
+                  </ul>{" "}
+                </li>
+                <li>
+                  Subtitles and Language:
+                  <ul>
+                    <li>
+                      There is no restriction of the language of the film.
+                    </li>
+                    <li>
+                      Subtitles are mandatory for each film and can be added in
+                      one of the following way:
+                      <ul>
+                        <li>
+                          In film - <strong>Recommended</strong>
+                        </li>
+                        <li>
+                          Separate SRT file - uploaded with Google drive link
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Entry fee payment:
+                  <ul>
+                    <li>
+                      A nominal entry fee of Rs. 199 must be payed for every
+                      individual entry.
+                    </li>
+                    <li>
+                      Kindly take the screenshot of the payment success page
+                      which needs to be uploaded with the entry.
+                    </li>
+                    <li>
+                      Payment can be made in one of the following way:
+                      <ul>
+                        <li>
+                          Google Pay - <strong>Recommended</strong>
+                        </li>
+                        <li>Paytm </li>
+                        <li>
+                          (payment numbers will be provided here by 14 July,
+                          2020)
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Upload your film in one of the following and submit the link
+                  in the form:
+                  <ul>
+                    <li>Youtube Private Link (Recommended)</li>
+                    <li>Google Drive</li>
+                  </ul>
+                </li>
+                <li>
+                  Submit the Film Submission form filling all the details in
+                  order for a successful submission.
+                </li>
+                <li>
+                  Please check{" "}
+                  <Link
+                    href="#faq"
+                    color="secondary"
+                    style={{ textDecoration: "underline" }}
                   >
-                    Submit
-                  </Button>
-                </Grid>
-              </Grid>
-            </form>
+                    FAQ
+                  </Link>{" "}
+                  for any other queries, or feel free to{" "}
+                  <Link
+                    href="#contact"
+                    color="secondary"
+                    style={{ textDecoration: "underline" }}
+                  >
+                    Contact us
+                  </Link>
+                  .
+                </li>
+              </ol>
+            </Typography>
           </Box>
-        </Box>
-      </Grid>
-      <Grid id={"howto"} item xs={12} className={classes.rules}>
-        <Box className={classes.rulesWrapper}>
-          <Typography
-            variant="h5"
-            component="h5"
-            style={{ textAlign: "center" }}
-          >
-            How to submit
-          </Typography>
-          <Typography variant="subtitle1" component="span">
-            <ol>
-              <li>
-                Upload your film in one of the following:
-                <ul>
-                  <li>Youtube Private Link (Recommended)</li>
-                  <li>Google Drive</li>
-                </ul>
-              </li>
-            </ol>
-          </Typography>
-        </Box>
-      </Grid>
+        </Grid>
+      </Paper>
     </Container>
   );
 };

@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => {
     },
     menuOpts: {
       width: "35vw",
-      minWidth: "400px",
+      minWidth: "550px",
       backgroundColor: "#0000006b",
       padding: theme.spacing(1),
       display: "flex",
@@ -78,11 +78,11 @@ const useStyles = makeStyles(theme => {
 
 const menuItemsHome = [
   { text: "Submit Film", anchor: "submit", type: "button" },
-  { text: "About", anchor: "follow", type: "link" },
+  { text: "Contact", anchor: "follow", type: "link" },
+  { text: "About", anchor: "about", type: "link" },
   { text: "Dates", anchor: "dates", type: "link" },
   { text: "Rules", anchor: "rules", type: "link" },
   { text: "FAQ", anchor: "faq", type: "link" },
-  { text: "Contact", anchor: "contact", type: "link" },
   { text: "Sharpnerd", anchor: "Sharpnerd", type: "button" }
 ];
 

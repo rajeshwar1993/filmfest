@@ -22,7 +22,10 @@ import {
   DialogContent,
   Grid,
   Tooltip,
-  CircularProgress
+  CircularProgress,
+  Typography,
+  FormControlLabel,
+  Checkbox
 } from "@material-ui/core";
 
 let inDebounce;
@@ -67,6 +70,14 @@ const AdminScreen = () => {
   const [dialogLoadingIsOpen, toggleDialogLoadingIsOpen] = useState(false);
   const [dialogObj, toggleDialogObj] = useState({});
   const [searchText, updateSearchText] = useState("");
+  const [payFilter, updatePayFilter] = useState({
+    i: false,
+    s: false,
+    u: false
+  });
+  const [sortBy, updateSortBy] = useState({
+    genre: false
+  });
 
   useEffect(() => {
     dispatch(fetch_all_entries());
@@ -108,12 +119,93 @@ const AdminScreen = () => {
             fullWidth
             name="searchtext"
             id="searchtext"
-            label={"Search"}
-            placeholder="Team ID, Team Name, Leader Name, Email, Film Title"
+            label={"Team/Leader Name, Email, Title"}
             value={searchText}
             onChange={e => {
               updateSearchText(e.nativeEvent.target.value);
             }}
+          />
+        </Grid>
+        <Grid item xs={12} md={2}>
+          <Typography variant="body1" style={{ color: "#000" }}>
+            Filter By:
+          </Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={payFilter.i}
+                onChange={() => {
+                  updatePayFilter({
+                    ...payFilter,
+                    i: !payFilter.i
+                  });
+                }}
+              />
+            }
+            label={
+              <Typography variant="body2" style={{ color: "#000" }}>
+                Pay-I
+              </Typography>
+            }
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={payFilter.s}
+                onChange={() => {
+                  updatePayFilter({
+                    ...payFilter,
+                    s: !payFilter.s
+                  });
+                }}
+              />
+            }
+            label={
+              <Typography variant="body2" style={{ color: "#000" }}>
+                Pay-S
+              </Typography>
+            }
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={payFilter.u}
+                onChange={() => {
+                  updatePayFilter({
+                    ...payFilter,
+                    u: !payFilter.u
+                  });
+                }}
+              />
+            }
+            label={
+              <Typography variant="body2" style={{ color: "#000" }}>
+                Pay-U
+              </Typography>
+            }
+          />
+        </Grid>
+        <Grid item xs={12} md={2}>
+          <Typography variant="body1" style={{ color: "#000" }}>
+            Sort By:
+          </Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={sortBy.genre}
+                onChange={() => {
+                  updateSortBy({
+                    ...sortBy,
+                    genre: !sortBy.genre
+                  });
+                }}
+              />
+            }
+            label={
+              <Typography variant="body2" style={{ color: "#000" }}>
+                Genre
+              </Typography>
+            }
           />
         </Grid>
       </Grid>
@@ -153,11 +245,26 @@ const AdminScreen = () => {
                       .includes(searchText.toLocaleLowerCase()) ||
                     ent.email
                       .toLowerCase()
-                      .includes(searchText.toLocaleLowerCase()) ||
-                    ent.genre
-                      .toLowerCase()
                       .includes(searchText.toLocaleLowerCase())
                   );
+                })
+                .filter(ent => {
+                  return (
+                    (payFilter.i && ent.paypic.issue) ||
+                    (payFilter.s && ent.paypic.verified) ||
+                    (payFilter.u &&
+                      !ent.paypic.issue &&
+                      !ent.paypic.verified) ||
+                    (!payFilter.i && !payFilter.s && !payFilter.u)
+                  );
+                })
+                .sort((a, b) => {
+                  if (!sortBy.genre) return 0;
+                  else {
+                    if (a.genre < b.genre) return -1;
+                    else if (a.genre > b.genre) return 1;
+                    else return 0;
+                  }
                 })
                 .map((ent, i) => {
                   let time = "";
@@ -421,9 +528,8 @@ const AllDetailsDialog = ({
           </Grid>
           <Grid item xs={6}>
             <TextField
-              name="issue"
-              id="issue"
-              label="Issue Description"
+              name="delText"
+              id="delText"
               placeholder={dialogObj.team_name}
               onChange={e => {
                 if (e.nativeEvent.target.value === dialogObj.team_name)

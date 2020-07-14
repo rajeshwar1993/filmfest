@@ -59,6 +59,12 @@ export const entriesReducer = (state = entriesState, action) => {
       });
       return temp;
 
+    case "DELETE":
+      temp.entryItems = temp.entryItems.filter(item => {
+        return item.id !== action.data.id;
+      });
+      return temp;
+
     case "CLEAR_ALL":
       temp.entryItems = [];
       return temp;

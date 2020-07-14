@@ -10,14 +10,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   Box,
   AppBar,
-  Typography,
   Toolbar,
   Button,
   Hidden,
   IconButton,
   Menu,
   MenuItem,
-  Link,
+  Link
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
@@ -28,18 +27,18 @@ import Administrator from "./Administrator";
 
 import { login } from "../components/actions";
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles(theme => {
   return {
     menuBar: {
-      backgroundColor: "#000000de",
+      backgroundColor: "#000000de"
     },
     toolBar: {
       display: "flex",
-      justifyContent: "space-between",
+      justifyContent: "space-between"
     },
     logoWrapper: {
       backgroundColor: "#0000006b",
-      borderRadius: theme.spacing(1),
+      borderRadius: theme.spacing(1)
       // "& .MuiTypography-root": {
       //   padding: theme.spacing(1, 2),
       //   color: theme.palette.common.white,
@@ -48,12 +47,12 @@ const useStyles = makeStyles((theme) => {
     },
     mobileMenuButton: {
       backgroundColor: "#0000006b",
-      borderRadius: theme.spacing(3),
+      borderRadius: theme.spacing(3)
     },
     mobileMenu: {
       "& .MuiPaper-root": {
-        backgroundColor: theme.palette.common.sectionBackground,
-      },
+        backgroundColor: theme.palette.common.sectionBackground
+      }
     },
     menuOpts: {
       width: "35vw",
@@ -63,28 +62,28 @@ const useStyles = makeStyles((theme) => {
       display: "flex",
       justifyContent: "space-around",
       alignItems: "center",
-      borderRadius: theme.spacing(1),
+      borderRadius: theme.spacing(1)
     },
     menuEls: {
       color: theme.palette.common.textColor,
       cursor: "pointer",
       [theme.breakpoints.up("md")]: {
         "&:hover": {
-          textDecoration: "underline",
-        },
-      },
-    },
+          textDecoration: "underline"
+        }
+      }
+    }
   };
 });
 
 const menuItemsHome = [
   { text: "Submit Film", anchor: "submit", type: "button" },
   { text: "Contact", anchor: "follow", type: "link" },
-  { text: "About", anchor: "about", type: "link" },
   { text: "Dates", anchor: "dates", type: "link" },
+  { text: "About", anchor: "about", type: "link" },
   { text: "Rules", anchor: "rules", type: "link" },
   { text: "FAQ", anchor: "faq", type: "link" },
-  { text: "Sharpnerd", anchor: "Sharpnerd", type: "button" },
+  { text: "Sharpnerd", anchor: "Sharpnerd", type: "button" }
 ];
 
 const Main = ({ data }) => {
@@ -94,7 +93,7 @@ const Main = ({ data }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  firebase.auth().onAuthStateChanged(function (user) {
+  firebase.auth().onAuthStateChanged(function(user) {
     if (user && user.uid && user.email) {
       console.log("Found user:", user);
       //toggleIsLoggedIn({ uid: user.uid, email: user.email });
@@ -105,7 +104,7 @@ const Main = ({ data }) => {
     }
   });
 
-  const openMenu = (e) => {
+  const openMenu = e => {
     setAnchorEl(e.currentTarget);
   };
 
@@ -121,7 +120,7 @@ const Main = ({ data }) => {
       duration: 1000,
       smooth: true,
       delay: 0,
-      offset: -70,
+      offset: -70
     });
   };
 
@@ -132,11 +131,15 @@ const Main = ({ data }) => {
           <Hidden smDown>
             <Box className={classes.logoWrapper}>
               <Link href="/">
-                <img src={logo2} style={{ height: "30px" }} />
+                <img
+                  src={logo2}
+                  alt="Tales in 10 Home"
+                  style={{ height: "30px" }}
+                />
               </Link>
             </Box>
             <Box className={classes.menuOpts}>
-              {menuItemsHome.map((item) => {
+              {menuItemsHome.map(item => {
                 if (item.type === "button") {
                   return (
                     <Button
@@ -149,26 +152,26 @@ const Main = ({ data }) => {
                       {item.text}
                     </Button>
                   );
-                } else if (item.type === "link")
-                  return (
-                    <Link
-                      key={"d-" + item.text}
-                      href={`#${item.anchor}`}
-                      className={classes.menuEls}
-                      onClick={(e) => {
-                        scrollEl(e, item.anchor);
-                      }}
-                    >
-                      {item.text}
-                    </Link>
-                  );
+                }
+                return (
+                  <Link
+                    key={"d-" + item.text}
+                    href={`#${item.anchor}`}
+                    className={classes.menuEls}
+                    onClick={e => {
+                      scrollEl(e, item.anchor);
+                    }}
+                  >
+                    {item.text}
+                  </Link>
+                );
               })}
             </Box>
           </Hidden>
           <Hidden mdUp>
             <Box className={classes.logoWrapper}>
               <Link href="/">
-                <img src={logo2} style={{ height: "20px" }} />
+                <img src={logo2} alt="Tales in 10" style={{ height: "20px" }} />
               </Link>
             </Box>
             <Box className={classes.mobileMenuButton}>
@@ -189,7 +192,7 @@ const Main = ({ data }) => {
                 onClose={handleMenuClose}
                 className={classes.mobileMenu}
               >
-                {menuItemsHome.map((item) => (
+                {menuItemsHome.map(item => (
                   <MenuItem onClick={handleMenuClose}>
                     {item.type === "button" && (
                       <Button
@@ -209,7 +212,7 @@ const Main = ({ data }) => {
                         fullWidth
                         color="primary"
                         variant="text"
-                        onClick={(e) => {
+                        onClick={e => {
                           scrollEl(e, item.anchor);
                         }}
                       >
@@ -228,12 +231,9 @@ const Main = ({ data }) => {
         <Route path="/Sharpnerd" component={Sharpnerd} />
         <Route
           path="/administrator"
-          component={(props) => <Administrator {...props} />}
+          component={props => <Administrator {...props} />}
         />
-        <Route
-          path="/"
-          component={(props) => <Home data={data} {...props} />}
-        />
+        <Route path="/" component={props => <Home data={data} {...props} />} />
       </Switch>
     </>
   );

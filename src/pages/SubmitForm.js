@@ -23,7 +23,8 @@ import {
   FormControlLabel,
   Checkbox,
   Paper,
-  Hidden
+  Hidden,
+  DialogContentText
 } from "@material-ui/core";
 
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -70,6 +71,13 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1, 0),
     border: "1px solid",
     borderRadius: theme.spacing(1)
+  },
+  dialogBox: {
+    textAlign: "center",
+    "& img": {
+      width: "250px",
+      height: "250px"
+    }
   }
 }));
 
@@ -101,9 +109,23 @@ const SubmitForm = () => {
     }
   };
 
+  const [dialogControl, updateDialogControl] = useState({
+    open: false,
+    title: "",
+    text: "",
+    img: "",
+    closeButtonText: "close"
+  });
+
+  const handleCloseDialog = () => {
+    updateDialogControl({
+      ...dialogControl,
+      open: false
+    });
+  };
+
   const uploadInfo = async data => {
     try {
-      console.log(data);
       toggleIsLoading(true);
 
       toggleDialogIsOpen(true);
@@ -131,7 +153,6 @@ const SubmitForm = () => {
       let docs = await q.get();
       if (!docs.empty) {
         //TODO: throw error
-        console.log("Duplicate entry exists!");
         toggleIsLoading(false);
         updateDialogObj({
           error: true,
@@ -142,11 +163,11 @@ const SubmitForm = () => {
 
       //create a doc(film entry)
       let docRef = await temp.add({
-        ...uploadData
+        ...uploadData,
+        status: {}
       });
       if (!docRef.id) {
         //TODO: throw error
-        console.log("Submission unsuccessful :(");
         toggleIsLoading(false);
         updateDialogObj({
           error: true,
@@ -155,7 +176,6 @@ const SubmitForm = () => {
         return;
       }
       docRef = docRef.id;
-      console.log(docRef);
 
       //upload the image with doc
       const fileObj = data.paypic[0];
@@ -184,13 +204,10 @@ const SubmitForm = () => {
           uploadTask.snapshot.ref.getDownloadURL().then(async url => {
             //enter the image url in film entry
             //create a doc(film entry)
-            console.log(url);
+
             await temp.doc(docRef).update({
               paypic: { url, verified: false, issue: false }
             });
-
-            //delete temp entry
-            //await temp.doc(docRef).delete();
             toggleIsLoading(false);
             updateDialogObj({ error: false });
           });
@@ -207,6 +224,28 @@ const SubmitForm = () => {
     <Container maxWidth={"md"} className={classes.root}>
       <Paper className={classes.paper}>
         <Dialog
+          open={dialogControl.open}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          className={classes.dialogBox}
+        >
+          <DialogTitle id="alert-dialog-title">
+            {dialogControl.title}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {dialogControl.text}
+            </DialogContentText>
+            <img src={dialogControl.img} alt={dialogControl.title} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary" autoFocus>
+              {dialogControl.closeButtonText}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
           onClose={handleClose}
           aria-labelledby="simple-dialog-title"
           open={dialogIsOpen}
@@ -217,13 +256,19 @@ const SubmitForm = () => {
           <DialogContent>
             {isLoading && <CircularProgress />}
             {!isLoading && !dialogObj.error && (
-              <Typography
-                variant="h5"
-                component="h5"
-                style={{ color: "#07a465" }}
-              >
-                Submission Successful!!
-              </Typography>
+              <>
+                <Typography
+                  variant="h5"
+                  component="h5"
+                  style={{ color: "#07a465" }}
+                >
+                  Successful Submission!
+                </Typography>
+                <Typography variant="body1" style={{ color: "#fff" }}>
+                  We will very your film link and payment info and get back on
+                  mail for any further communication. Thanks!
+                </Typography>
+              </>
             )}
             {!isLoading && dialogObj.error && (
               <>
@@ -232,10 +277,15 @@ const SubmitForm = () => {
                   component="h5"
                   style={{ color: "red" }}
                 >
-                  Submission Unuccessful!!
+                  Unuccessful Submission !!
                 </Typography>
                 <Typography variant="h6" component="h6">
                   {dialogObj.message}
+                </Typography>
+                <Typography variant="body1" style={{ color: "#fff" }}>
+                  Please write back to us productions.sharp.nerd@gmail.com along
+                  with the screenshot of this message so that we can take your
+                  submission forward. Thanks.
                 </Typography>
               </>
             )}
@@ -251,21 +301,20 @@ const SubmitForm = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        <Hidden xsUp>
+        {/* <Hidden xsUp> */}
+        <Paper>
           <Grid item xs={12} className={classes.submit}>
             <Box className={classes.submitWrapper}>
               <Box>
-                <form onSubmit={handleSubmit(uploadInfo)}>
+                <form onSubmit={handleSubmit(uploadInfo)} autoComplete="off">
                   <Grid container spacing={4}>
                     <Grid item xs={12}>
-                      <Typography variant="h5" component="h5">
-                        Submit Film:
-                      </Typography>
-                      <Typography variant="body2">
+                      <Typography variant="h3">Submit your film</Typography>
+                      <Typography variant="h6">
                         Please read the{" "}
                         <Link
                           href="#howto"
-                          color="secondary"
+                          color="primary"
                           style={{ textDecoration: "underline" }}
                         >
                           How To Submit
@@ -408,9 +457,7 @@ const SubmitForm = () => {
                         name={"link"}
                         variant="standard"
                         label={"Film Link *"}
-                        placeholder={
-                          "Google Drive / Youtube Private / Vemo Private link"
-                        }
+                        placeholder={"Google Drive / Youtube Private Link"}
                         fullWidth
                         inputRef={register({ required: true })}
                         error={!!errors.link}
@@ -434,7 +481,7 @@ const SubmitForm = () => {
                             required: {
                               value: true,
                               message:
-                                "Please upload payment screenshot of Rs 149 by Google Pay / PayTm."
+                                "Please upload the screenshot of the payment confirmation screen."
                             }
                           })}
                           onChange={e => {
@@ -445,8 +492,12 @@ const SubmitForm = () => {
                       </Button>
                       {!errors.paypic && (
                         <FormHelperText>
-                          Please upload payment screenshot of Rs 149 by Google
-                          Pay / PayTm.
+                          Please upload the screenshot of the payment
+                          confirmation screen. See payment details{" "}
+                          <Link color="primary" href="#howto">
+                            here
+                          </Link>
+                          .
                         </FormHelperText>
                       )}
                       {!!errors.paypic && (
@@ -560,14 +611,14 @@ const SubmitForm = () => {
                           />
                         }
                         label={
-                          <Typography variant="body2" style={{ color: "#000" }}>
+                          <Typography variant="body2">
                             I have read and followed all the competition{" "}
-                            <Link href="/#rules" color="secondary">
+                            <Link href="/#rules" color="primary">
                               Rules
                             </Link>
                             . I have also followed all the steps mentioned in
                             the{" "}
-                            <Link color="secondary" href="#howto">
+                            <Link color="primary" href="#howto">
                               How to Submit
                             </Link>{" "}
                             Section.
@@ -591,12 +642,13 @@ const SubmitForm = () => {
               </Box>
             </Box>
           </Grid>
-        </Hidden>
-        <Grid item xs={12} className={classes.submit}>
+        </Paper>
+        {/* </Hidden> */}
+        {/* <Grid item xs={12} className={classes.submit}>
           <Typography variant="h3">
             Submission form will be active here at 10:00am (IST) 15 July, 2020
           </Typography>
-        </Grid>
+        </Grid> */}
         <Grid id={"howto"} item xs={12} className={classes.rules}>
           <Box className={classes.rulesWrapper}>
             <Typography
@@ -627,23 +679,78 @@ const SubmitForm = () => {
                       Include the given opening slide of the film at the very
                       begining. The 10 mins maximum runtime will{" "}
                       <strong>NOT</strong> include the opening slide duration.
-                      The slide will be provided as a downloadable link in the{" "}
-                      <Link
-                        href="/rules"
-                        color="secondary"
-                        style={{ textDecoration: "underline" }}
+                    </li>
+                    <li>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => {
+                          store
+                            .ref()
+                            .child("siteImages/opening_slate.mp4")
+                            .getDownloadURL()
+                            .then(function(url) {
+                              // `url` is the download URL for 'images/stars.jpg'
+
+                              // This can be downloaded directly:
+                              // This can be downloaded directly:
+                              var xhr = new XMLHttpRequest();
+                              xhr.responseType = "blob";
+                              xhr.onload = function(event) {
+                                var blob = xhr.response;
+                                const url = URL.createObjectURL(blob);
+
+                                // Create a new anchor element
+                                const a = document.createElement("a");
+
+                                // Set the href and download attributes for the anchor element
+                                // You can optionally set other attributes like `title`, etc
+                                // Especially, if the anchor element will be attached to the DOM
+                                a.href = url;
+                                a.download = "Opening_Slate_Tales_In_10";
+                                // Click handler that releases the object URL after the element has been clicked
+                                // This is required for one-off downloads of the blob content
+                                const clickHandler = () => {
+                                  setTimeout(() => {
+                                    URL.revokeObjectURL(url);
+                                    this.removeEventListener(
+                                      "click",
+                                      clickHandler
+                                    );
+                                  }, 150);
+                                };
+
+                                // Add the click event listener on the anchor element
+                                // Comment out this line if you don't want a one-off download of the blob content
+                                a.addEventListener(
+                                  "click",
+                                  clickHandler,
+                                  false
+                                );
+
+                                // Programmatically trigger a click on the anchor element
+                                // Useful if you want the download to happen automatically
+                                // Without attaching the anchor element to the DOM
+                                // Comment out this line if you don't want an automatic download of the blob content
+                                a.click();
+                                return a;
+                              };
+                              xhr.open("GET", url);
+                              xhr.send();
+                            })
+                            .catch(function(error) {
+                              // Handle any errors
+                            });
+                        }}
                       >
-                        Rules
-                      </Link>{" "}
-                      and{" "}
-                      <Link
-                        href="/submit#howto"
-                        color="secondary"
-                        style={{ textDecoration: "underline" }}
-                      >
-                        How to Submit
-                      </Link>{" "}
-                      section by 14 July, 2020.
+                        Click here to download opening slate
+                      </Button>
+                      <div>
+                        <Typography variant="caption" component="span">
+                          Designed by Ishaan Moitra. ©Tales in 10 Short Film
+                          Festival.
+                        </Typography>
+                      </div>
                     </li>
                     <li>
                       Please render your films at a resolution of either 720p or
@@ -687,12 +794,47 @@ const SubmitForm = () => {
                       Payment can be made in one of the following way:
                       <ul>
                         <li>
-                          Google Pay - <strong>Recommended</strong>
+                          All Payments will go to Mr. Joydeep Pal, our Financial
+                          Coordinator.
                         </li>
-                        <li>Paytm </li>
                         <li>
-                          (payment numbers will be provided here by 14 July,
-                          2020)
+                          Google Pay - No: 9013506567{" "}
+                          <Button
+                            variant={"outlined"}
+                            color="primary"
+                            onClick={() => {
+                              updateDialogControl({
+                                ...dialogControl,
+                                open: true,
+                                title: "Google Pay QR Code",
+                                text: "Scan this on Google Pay App to pay.",
+                                img:
+                                  "https://firebasestorage.googleapis.com/v0/b/filmfest-8db31.appspot.com/o/siteImages%2Fgpay.png?alt=media&token=d9118d41-d184-4a79-909d-99f332f73179"
+                              });
+                            }}
+                          >
+                            Google Pay QR Code
+                          </Button>{" "}
+                          <strong>(Recommended)</strong>
+                        </li>
+                        <li>
+                          Paytm - No: 9013506567{" "}
+                          <Button
+                            variant={"outlined"}
+                            color="primary"
+                            onClick={() => {
+                              updateDialogControl({
+                                ...dialogControl,
+                                open: true,
+                                title: "PayTm QR Code",
+                                text: "Scan this on PayTm App to pay.",
+                                img:
+                                  "https://firebasestorage.googleapis.com/v0/b/filmfest-8db31.appspot.com/o/siteImages%2Fpaytm.png?alt=media&token=8d4ffc20-626c-4ded-b708-3bce0cf9d431"
+                              });
+                            }}
+                          >
+                            PayTm QR Code
+                          </Button>
                         </li>
                       </ul>
                     </li>

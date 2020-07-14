@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import firebase from "firebase";
 import { useSelector, useDispatch } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import { Container, Grid, Typography, Button } from "@material-ui/core";
+import { Container, Grid, Typography, Button, Paper } from "@material-ui/core";
 
 import Login from "../components/Login";
 
@@ -28,7 +28,6 @@ const Administrator = ({ ...props }) => {
   const { isLoggedIn } = useSelector(state => state.app);
 
   const loginUser = data => {
-    console.log(data);
 
     let persistance = firebase.auth.Auth.Persistence.LOCAL;
     dispatch(clear_err());
@@ -50,42 +49,36 @@ const Administrator = ({ ...props }) => {
 
   return (
     <Container maxWidth={"xl"} className={classes.root}>
-      {!isLoggedIn && (
-        <Grid container justify="center" className={classes.root} spacing={4}>
-          <Login loginUser={loginUser} />
-        </Grid>
-      )}
+      {!isLoggedIn && <Login loginUser={loginUser} />}
       {isLoggedIn && (
-        <>
-          <Grid container justify="center" className={classes.root} spacing={4}>
-            <Grid item xs={12}>
-              <Typography variant="h4">Welcome, Administrator</Typography>
-              <Button
-                type="button"
-                color="secondary"
-                variant="contained"
-                onClick={() => {
-                  firebase
-                    .auth()
-                    .signOut()
-                    .then(function() {
-                      // Sign-out successful.
-                      dispatch(logout());
-                    })
-                    .catch(function(error) {
-                      // An error happened.
-                      console.log("Error in logging out", error);
-                    });
-                }}
-              >
-                Logout
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <AdminScreen />
-            </Grid>
+        <Grid container justify="center" className={classes.root} spacing={4}>
+          <Grid item xs={12}>
+            <Typography variant="h4">Welcome, Administrator</Typography>
+            <Button
+              type="button"
+              color="secondary"
+              variant="contained"
+              onClick={() => {
+                firebase
+                  .auth()
+                  .signOut()
+                  .then(function() {
+                    // Sign-out successful.
+                    dispatch(logout());
+                  })
+                  .catch(function(error) {
+                    // An error happened.
+                    console.log("Error in logging out", error);
+                  });
+              }}
+            >
+              Logout
+            </Button>
           </Grid>
-        </>
+          <Grid item xs={12}>
+            <AdminScreen />
+          </Grid>
+        </Grid>
       )}
     </Container>
   );

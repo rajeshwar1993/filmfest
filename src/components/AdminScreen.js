@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import firebase from "firebase";
 import { useSelector, useDispatch } from "react-redux";
 
-import { withStyles, makeStyles, useTheme } from "@material-ui/core/styles";
-import { fetch_all_entries, update_entry_db } from "../components/actions";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import {
+  fetch_all_entries,
+  update_entry_db,
+  delete_entry_db
+} from "../components/actions";
 
 import {
   Container,
@@ -25,13 +29,11 @@ import {
   CircularProgress,
   Typography,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Chip
 } from "@material-ui/core";
 
-let inDebounce;
-
 const useStyles = makeStyles(theme => {
-  console.log(theme);
   return {
     imageDialog: {
       "& img": {
@@ -44,10 +46,10 @@ const useStyles = makeStyles(theme => {
 const StyledTableRow = withStyles(theme => ({
   root: {
     "&:nth-of-type(odd)": {
-      backgroundColor: "#b39ddb"
+      backgroundColor: "#203d52"
     },
     "&:nth-of-type(even)": {
-      backgroundColor: "#90caf9"
+      backgroundColor: "#552f2f"
     }
   }
 }))(TableRow);
@@ -67,6 +69,7 @@ const AdminScreen = () => {
 
   const [dialogImgIsOpen, toggleDialogImgIsOpen] = useState(false);
   const [dialogAllIsOpen, toggleDialogAllIsOpen] = useState(false);
+  const [dialogStatusIsOpen, toggleDialogStatusIsOpen] = useState(false);
   const [dialogLoadingIsOpen, toggleDialogLoadingIsOpen] = useState(false);
   const [dialogObj, toggleDialogObj] = useState({});
   const [searchText, updateSearchText] = useState("");
@@ -91,137 +94,125 @@ const AdminScreen = () => {
     if (reason !== "backdropClick") {
       toggleDialogImgIsOpen(false);
       toggleDialogAllIsOpen(false);
+      toggleDialogStatusIsOpen(false);
       toggleDialogObj({});
     }
   };
 
-  // const debounceInput = (func, delay) => {
-  //   clearTimeout(inDebounce);
-  //   const context = this;
-  //   const args = arguments;
-  //   inDebounce = setTimeout(() => func.apply(context, args), delay);
-  // };
-
   return (
-    <Container maxWidth="xl">
-      <Grid
-        container
-        style={{
-          backgroundColor: "#fff",
-          marginTop: "20px",
-          marginBottom: "20px",
-          padding: "20px",
-          borderRadius: "4px"
-        }}
-      >
-        <Grid item xs={12} md={2}>
-          <TextField
-            fullWidth
-            name="searchtext"
-            id="searchtext"
-            label={"Team/Leader Name, Email, Title"}
-            value={searchText}
-            onChange={e => {
-              updateSearchText(e.nativeEvent.target.value);
-            }}
-          />
+    <>
+      <Paper>
+        <Grid
+          container
+          style={{
+            marginTop: "20px",
+            marginBottom: "20px",
+            padding: "20px",
+            borderRadius: "4px"
+          }}
+        >
+          <Grid item xs={12} md={3}>
+            <TextField
+              fullWidth
+              name="searchtext"
+              id="searchtext"
+              label={"Team/Leader Name, Email, Title"}
+              value={searchText}
+              onChange={e => {
+                updateSearchText(e.nativeEvent.target.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <Typography variant="body1">Filter By:</Typography>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={payFilter.i}
+                  onChange={() => {
+                    updatePayFilter({
+                      ...payFilter,
+                      i: !payFilter.i
+                    });
+                  }}
+                />
+              }
+              label={<Typography variant="body2">Pay-I</Typography>}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={payFilter.s}
+                  onChange={() => {
+                    updatePayFilter({
+                      ...payFilter,
+                      s: !payFilter.s
+                    });
+                  }}
+                />
+              }
+              label={<Typography variant="body2">Pay-S</Typography>}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={payFilter.u}
+                  onChange={() => {
+                    updatePayFilter({
+                      ...payFilter,
+                      u: !payFilter.u
+                    });
+                  }}
+                />
+              }
+              label={<Typography variant="body2">Pay-U</Typography>}
+            />
+          </Grid>
+          <Grid item xs={12} md={2}>
+            <Typography variant="body1">Sort By:</Typography>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={sortBy.genre}
+                  onChange={() => {
+                    updateSortBy({
+                      ...sortBy,
+                      genre: !sortBy.genre
+                    });
+                  }}
+                />
+              }
+              label={<Typography variant="body2">Genre</Typography>}
+            />
+          </Grid>
+          <Grid item xs={12} md={2}>
+            <Button
+              onClick={() => {
+                dispatch(fetch_all_entries());
+              }}
+              variant="contained"
+              color={"primary"}
+              size="small"
+            >
+              Refresh List
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={2}>
-          <Typography variant="body1" style={{ color: "#000" }}>
-            Filter By:
-          </Typography>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={payFilter.i}
-                onChange={() => {
-                  updatePayFilter({
-                    ...payFilter,
-                    i: !payFilter.i
-                  });
-                }}
-              />
-            }
-            label={
-              <Typography variant="body2" style={{ color: "#000" }}>
-                Pay-I
-              </Typography>
-            }
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={payFilter.s}
-                onChange={() => {
-                  updatePayFilter({
-                    ...payFilter,
-                    s: !payFilter.s
-                  });
-                }}
-              />
-            }
-            label={
-              <Typography variant="body2" style={{ color: "#000" }}>
-                Pay-S
-              </Typography>
-            }
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={payFilter.u}
-                onChange={() => {
-                  updatePayFilter({
-                    ...payFilter,
-                    u: !payFilter.u
-                  });
-                }}
-              />
-            }
-            label={
-              <Typography variant="body2" style={{ color: "#000" }}>
-                Pay-U
-              </Typography>
-            }
-          />
-        </Grid>
-        <Grid item xs={12} md={2}>
-          <Typography variant="body1" style={{ color: "#000" }}>
-            Sort By:
-          </Typography>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={sortBy.genre}
-                onChange={() => {
-                  updateSortBy({
-                    ...sortBy,
-                    genre: !sortBy.genre
-                  });
-                }}
-              />
-            }
-            label={
-              <Typography variant="body2" style={{ color: "#000" }}>
-                Genre
-              </Typography>
-            }
-          />
-        </Grid>
-      </Grid>
+      </Paper>
       <TableContainer component={Paper}>
         <Table aria-label="entries table">
           <TableHead>
             <TableCell align="center">All Details</TableCell>
-            <TableCell align="center">Submission DateTime</TableCell>
-            <TableCell align="center">Team Name</TableCell>
-            <TableCell align="center">Leader Name</TableCell>
-            <TableCell align="center">Leader E-mail</TableCell>
-            <TableCell align="center">Leader Phone</TableCell>
-            <TableCell align="center">Film Title</TableCell>
-            <TableCell align="center">Film Genre</TableCell>
-            <TableCell align="center">Film Link</TableCell>
-            <TableCell align="center">Payment Image</TableCell>
+            <TableCell align="center">DateTime</TableCell>
+            <TableCell align="center">Team</TableCell>
+            <TableCell align="center">Leader</TableCell>
+            <TableCell align="center">E-mail</TableCell>
+            <TableCell align="center">Phone</TableCell>
+            <TableCell align="center">Title</TableCell>
+            <TableCell align="center">Genre</TableCell>
+            <TableCell align="center">Link</TableCell>
+            <TableCell align="center">Payment</TableCell>
+            <TableCell align="center">Status</TableCell>
           </TableHead>
           <TableBody>
             {!entryItems && (
@@ -362,13 +353,52 @@ const AdminScreen = () => {
                           </Button>
                         </HtmlTooltip>
                       </TableCell>
+                      <TableCell align="center">
+                        <Button
+                          color="primary"
+                          size="small"
+                          onClick={() => {
+                            toggleDialogStatusIsOpen(true);
+                            toggleDialogObj(ent);
+                          }}
+                        >
+                          <Typography variant="caption">
+                            Update Status
+                          </Typography>
+                        </Button>
+                        {Object.keys(ent.status).length > 0 && (
+                          <>
+                            {ent.status.we && (
+                              <div>
+                                {" "}
+                                <Chip size="small" label="Welcome Email Sent" />
+                              </div>
+                            )}
+                            {ent.status.fv && (
+                              <div>
+                                {" "}
+                                <Chip size="small" label="Film Link Verified" />
+                              </div>
+                            )}
+                            {ent.status.fd && (
+                              <div>
+                                {" "}
+                                <Chip size="small" label="Film Downloaded" />
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </TableCell>
                     </StyledTableRow>
                   );
                 })}
           </TableBody>
         </Table>
       </TableContainer>
-      {(dialogImgIsOpen || dialogAllIsOpen || dialogLoadingIsOpen) && (
+      {(dialogImgIsOpen ||
+        dialogAllIsOpen ||
+        dialogLoadingIsOpen ||
+        dialogStatusIsOpen) && (
         <>
           <PayDialog
             handleClose={handleClose}
@@ -384,6 +414,13 @@ const AdminScreen = () => {
             dialogObj={dialogObj}
             dispatch={dispatch}
           />
+          <StatusDialog
+            handleClose={handleClose}
+            dialogIsOpen={dialogStatusIsOpen}
+            classes={classes}
+            dialogObj={dialogObj}
+            dispatch={dispatch}
+          />
           <LoadingDialog
             handleClose={handleClose}
             dialogIsOpen={dialogLoadingIsOpen}
@@ -392,7 +429,7 @@ const AdminScreen = () => {
           />
         </>
       )}
-    </Container>
+    </>
   );
 };
 
@@ -443,7 +480,7 @@ const PayDialog = ({
         </Grid>
       </DialogTitle>
       <DialogContent>
-        {dialogObj.paypic && <img src={dialogObj.paypic.url} />}
+        {dialogObj.paypic && <img src={dialogObj.paypic.url} alt="payment" />}
       </DialogContent>
       <DialogActions>
         <Grid container>
@@ -510,7 +547,6 @@ const AllDetailsDialog = ({
   dialogObj,
   dispatch
 }) => {
-  const theme = useTheme();
   const [enableDisable, toggleEnableDisable] = useState(false);
 
   return (
@@ -538,7 +574,10 @@ const AllDetailsDialog = ({
               }}
             />
             <Button
-              onClick={handleClose}
+              onClick={() => {
+                dispatch(delete_entry_db(dialogObj.id));
+                handleClose();
+              }}
               variant="contained"
               color={"danger"}
               disabled={!enableDisable}
@@ -675,6 +714,105 @@ const AllDetailsDialog = ({
         <Button onClick={handleClose} color="primary" variant="contained">
           Ok
         </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const StatusDialog = ({
+  handleClose,
+  dialogIsOpen,
+  classes,
+  dialogObj,
+  dispatch
+}) => {
+  const [stats, updateStats] = useState(dialogObj.status || {});
+
+  return (
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={dialogIsOpen}
+      maxWidth={"lg"}
+      className={classes.imageDialog}
+    >
+      <DialogTitle id="title">
+        <Grid container>
+          <Grid item xs={6}>
+            {"Entry Status"}
+          </Grid>
+          <Grid item xs={6}>
+            <Button onClick={handleClose} variant="contained">
+              Close
+            </Button>
+          </Grid>
+        </Grid>
+      </DialogTitle>
+      <DialogContent>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={stats.we}
+              onChange={e => {
+                updateStats({
+                  ...stats,
+                  we: e.nativeEvent.target.checked
+                });
+              }}
+            />
+          }
+          label={<Typography variant="body2">Welcome Email Sent</Typography>}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={stats.fv}
+              onChange={e => {
+                updateStats({
+                  ...stats,
+                  fv: e.nativeEvent.target.checked
+                });
+              }}
+            />
+          }
+          label={<Typography variant="body2">Film Link Verified</Typography>}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={stats.fd}
+              onChange={e => {
+                updateStats({
+                  ...stats,
+                  fd: e.nativeEvent.target.checked
+                });
+              }}
+            />
+          }
+          label={<Typography variant="body2">Film Link Downloaded</Typography>}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Grid container>
+          <Grid item xs={12}>
+            <Button
+              onClick={() => {
+                dispatch(
+                  update_entry_db(dialogObj.id, {
+                    status: {
+                      ...stats
+                    }
+                  })
+                );
+                handleClose();
+              }}
+              color="primary"
+              variant="contained"
+            >
+              Save
+            </Button>
+          </Grid>
+        </Grid>
       </DialogActions>
     </Dialog>
   );

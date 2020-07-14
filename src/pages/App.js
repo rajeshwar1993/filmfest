@@ -5,9 +5,9 @@ import { Provider } from "react-redux";
 import "../fire";
 import { BrowserRouter } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { composeWithDevTools } from "redux-devtools-extension";
+//import { composeWithDevTools } from "redux-devtools-extension";
 
-import { amber, indigo, red, deepOrange } from "@material-ui/core/colors";
+import { amber, indigo, red } from "@material-ui/core/colors";
 
 import Main from "./Main";
 import rootReducer from "../components/redux";
@@ -21,24 +21,21 @@ const theme = createMuiTheme({
       light: red[200],
       main: red[600],
       dark: red[900],
-      contrastText: "#fff",
+      contrastText: "#fff"
     },
     common: {
       sectionBackground: "#091213",
-      textColor: "#fff",
-    },
-  },
+      textColor: "#fff"
+    }
+  }
 });
 
 const data = {
-  fest_name: "Tales in 10",
+  fest_name: "Tales in 10"
 };
 
 function App() {
-  const store = createStore(
-    rootReducer,
-    composeWithDevTools(applyMiddleware(thunk))
-  );
+  const store = createStore(rootReducer, applyMiddleware(thunk));
 
   return (
     <div className="App" style={{ backgroundColor: "#091213" }}>

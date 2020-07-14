@@ -1,6 +1,7 @@
 import { db } from "../fire";
 
 const entriesDB = db.collection("entries");
+//const entriesBkpDB = db.collection("entriesBkp");
 
 export const login = data => {
   return {
@@ -40,6 +41,13 @@ export const set_all_entries = data => {
 export const update_entry = data => {
   return {
     type: "UPDATE",
+    data
+  };
+};
+
+export const delete_entry = data => {
+  return {
+    type: "DELETE",
     data
   };
 };
@@ -101,6 +109,23 @@ export const update_entry_db = (id, data) => {
       })
       .then(() => {
         dispatch(update_entry({ id, data }));
+        dispatch(stop_entry_loading());
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch(stop_entry_loading());
+      });
+  };
+};
+
+export const delete_entry_db = id => {
+  return dispatch => {
+    dispatch(start_entry_loading());
+    entriesDB
+      .doc(id)
+      .delete()
+      .then(() => {
+        dispatch(delete_entry({ id }));
         dispatch(stop_entry_loading());
       })
       .catch(err => {

@@ -17,6 +17,7 @@ exports.moveTempToEntries = functions.firestore
   .onUpdate(async (change, context) => {
     try {
       const entriesDb = admin.firestore().collection("entries");
+      const entriesBkpDb = admin.firestore().collection("entriesBkp");
       const tempDb = admin.firestore().collection("temp");
 
       //get all data
@@ -36,6 +37,12 @@ exports.moveTempToEntries = functions.firestore
       //write to entries db
 
       await entriesDb.doc(context.params.docId).set({
+        ...data
+      });
+
+      //write to entriesBkp db
+
+      await entriesBkpDb.doc(context.params.docId).set({
         ...data
       });
 
